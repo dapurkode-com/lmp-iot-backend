@@ -10,12 +10,9 @@ use Google_Service_Fitness_AggregateBy;
 use Google_Service_Fitness_AggregateRequest;
 use Google_Service_Fitness_BucketByTime;
 use Google_Service_Fitness_Session as Session;
-use Illuminate\Support\Facades\Http;
-use RuntimeException;
 
 class GoogleFitService
 {
-    public const CREDENTIALS_PATH = 'google-fit-access.json';
     public const AUTH_PATH = 'client_id.json';
     public const AUTH_PARAM = 'GOOGLE_FIT_TOKEN';
     public const ACTIVITY_TYPE_SLEEP = 72;
@@ -26,7 +23,6 @@ class GoogleFitService
 
     public function __construct()
     {
-        // $tokenPath = base_path(self::CREDENTIALS_PATH);
         $tokenData = Setting::find(self::AUTH_PARAM);
         $authConfig = base_path(self::AUTH_PATH);
 
@@ -69,11 +65,6 @@ class GoogleFitService
                     throw new Exception(join(', ', $accessToken));
                 }
             }
-            // Save the token to a file.
-            // if (!file_exists(dirname($tokenPath))) {
-            //     mkdir(dirname($tokenPath), 0700, true);
-            // }
-            // file_put_contents($tokenPath, json_encode($this->googleClient->getAccessToken()));
 
             Setting::updateOrCreate(['setting_param' => self::AUTH_PARAM], ['setting_value' => json_encode($this->googleClient->getAccessToken())]);
         }
