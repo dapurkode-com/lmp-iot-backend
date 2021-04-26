@@ -77,7 +77,7 @@ class GoogleFitService
         return new static();
     }
 
-    public function getSleepHoursCount()
+    public function getSleepHoursCount(): string
     {
         $response = $this->client->users_sessions->listUsersSessions('me');
 
@@ -92,11 +92,13 @@ class GoogleFitService
                 $endTime = Carbon::parse(intval($session->getEndTimeMillis() / 1000), 'UTC');
                 $diff = $endTime->diff($startTime);
                 return json_encode([
+                    "start_microtime" => $session->getStartTimeMillis(),
+                    "end_microtime" => $session->getEndTimeMillis(),
                     "hour" => intval($diff->format('%h')),
                     "minute" => intval($diff->format('%i')),
                     "second" => intval($diff->format('%s')),
                 ]);
-            })->first() ?? 0;
+            })->first() ?? '';
     }
 
     public function getStepCount(): int
@@ -118,11 +120,12 @@ class GoogleFitService
         $request->setEndTimeMillis(Carbon::today()->endOfDay()->timestamp * 1000);
 
         $response = $this->client->users_dataset->aggregate('me', $request);
+        if ($response->getBucket()[0]->getDataset()[0]->getPoint() == null) return 0;
 
         return $response->getBucket()[0]->getDataset()[0]->getPoint()[0]->getValue()[0]->getIntVal() ?? 0;
     }
 
-    public function getCaloriesExpended()
+    public function getCaloriesExpended(): float
     {
         $request = new Google_Service_Fitness_AggregateRequest();
 
@@ -141,11 +144,12 @@ class GoogleFitService
         $request->setEndTimeMillis(Carbon::today()->endOfDay()->timestamp * 1000);
 
         $response = $this->client->users_dataset->aggregate('me', $request);
+        if ($response->getBucket()[0]->getDataset()[0]->getPoint() == null) return 0;
 
         return $response->getBucket()[0]->getDataset()[0]->getPoint()[0]->getValue()[0]->getFpVal() ?? 0;
     }
 
-    public function getWeight()
+    public function getWeight(): float
     {
         $request = new Google_Service_Fitness_AggregateRequest();
 
@@ -164,11 +168,12 @@ class GoogleFitService
         $request->setEndTimeMillis(Carbon::today()->endOfDay()->timestamp * 1000);
 
         $response = $this->client->users_dataset->aggregate('me', $request);
+        if ($response->getBucket()[0]->getDataset()[0]->getPoint() == null) return 0;
 
         return $response->getBucket()[0]->getDataset()[0]->getPoint()[0]->getValue()[0]->getFpVal() ?? 0;
     }
 
-    public function getHeartRate()
+    public function getHeartRate(): int
     {
         $request = new Google_Service_Fitness_AggregateRequest();
 
@@ -187,6 +192,7 @@ class GoogleFitService
         $request->setEndTimeMillis(Carbon::today()->endOfDay()->timestamp * 1000);
 
         $response = $this->client->users_dataset->aggregate('me', $request);
+        if ($response->getBucket()[0]->getDataset()[0]->getPoint() == null) return 0;
 
         return (int) $response->getBucket()[0]->getDataset()[0]->getPoint()[0]->getValue()[0]->getFpVal() ?? 0;
     }
