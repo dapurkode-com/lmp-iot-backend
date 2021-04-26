@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use Carbon\Carbon;
 use Google_Client;
 use Google_Service_Fitness;
@@ -16,6 +17,7 @@ class GoogleFitService
 {
     public const CREDENTIALS_PATH = 'google-fit-access.json';
     public const AUTH_PATH = 'client_id.json';
+    public const AUTH_PARAM = 'GOOGLE_FIT_TOKEN';
     public const ACTIVITY_TYPE_SLEEP = 72;
 
     private Google_Client $googleClient;
@@ -24,8 +26,10 @@ class GoogleFitService
 
     public function __construct()
     {
-        $tokenPath = base_path(self::CREDENTIALS_PATH);
+        // $tokenPath = base_path(self::CREDENTIALS_PATH);
+        $tokenData = Setting::find(self::AUTH_PARAM);
         $authConfig = base_path(self::AUTH_PATH);
+
         $this->googleClient = app(Google_Client::class);
         $this->googleClient->setApplicationName('LMP IoT Dashboard');
         $this->googleClient->setScopes([
@@ -40,8 +44,8 @@ class GoogleFitService
         $this->googleClient->setAccessType('offline');
         $this->googleClient->setPrompt('select_account consent');
 
-        if (file_exists($tokenPath)) {
-            $accessToken = json_decode(file_get_contents($tokenPath), true);
+        if ($tokenData != null && $tokenData->setting_value != null) {
+            $accessToken = json_decode($tokenData->setting_value, true);
             $this->googleClient->setAccessToken($accessToken);
         }
 
@@ -66,10 +70,12 @@ class GoogleFitService
                 }
             }
             // Save the token to a file.
-            if (!file_exists(dirname($tokenPath))) {
-                mkdir(dirname($tokenPath), 0700, true);
-            }
-            file_put_contents($tokenPath, json_encode($this->googleClient->getAccessToken()));
+            // if (!file_exists(dirname($tokenPath))) {
+            //     mkdir(dirname($tokenPath), 0700, true);
+            // }
+            // file_put_contents($tokenPath, json_encode($this->googleClient->getAccessToken()));
+
+            Setting::updateOrCreate(['setting_param' => self::AUTH_PARAM], ['setting_value' => json_encode($this->googleClient->getAccessToken())]);
         }
 
         $this->client = new Google_Service_Fitness($this->googleClient);
@@ -80,17 +86,26 @@ class GoogleFitService
         return new static();
     }
 
-    public function getSleepHoursCount(): int
+    public function getSleepHoursCount()
     {
         $response = $this->client->users_sessions->listUsersSessions('me');
 
         return collect($response->getSession())->filter(static function (Session $session) {
             return $session->getActivityType() === self::ACTIVITY_TYPE_SLEEP;
-        })->filter(static function (Session $session) {
-            return Carbon::parse((int) ($session->getEndTimeMillis() / 1000))->isToday();
-        })->map(static function (Session $session) {
-            return ($session->getEndTimeMillis() - $session->getStartTimeMillis()) / 1000;
-        })->first() ?? 0;
+        })->reverse()
+            ->filter(static function (Session $session) {
+                return Carbon::parse((int) ($session->getEndTimeMillis() / 1000))->timezone(config('app.timezone'))->isToday();
+            })
+            ->map(static function (Session $session) {
+                $startTime = Carbon::parse(intval($session->getStartTimeMillis() / 1000), 'UTC');
+                $endTime = Carbon::parse(intval($session->getEndTimeMillis() / 1000), 'UTC');
+                $diff = $endTime->diff($startTime);
+                return json_encode([
+                    "hour" => intval($diff->format('%h')),
+                    "minute" => intval($diff->format('%i')),
+                    "second" => intval($diff->format('%s')),
+                ]);
+            })->first() ?? 0;
     }
 
     public function getStepCount(): int
@@ -183,30 +198,5 @@ class GoogleFitService
         $response = $this->client->users_dataset->aggregate('me', $request);
 
         return (int) $response->getBucket()[0]->getDataset()[0]->getPoint()[0]->getValue()[0]->getFpVal() ?? 0;
-    }
-    public function refreshAccessToken(): bool
-    {
-        $token = json_decode(
-            file_get_contents(base_path(self::CREDENTIALS_PATH)),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        )['refresh_token'];
-
-        $response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
-            'grant_type' => 'refresh_token',
-            'refresh_token' => $token,
-            'client_id' => env('GOOGLE_FIT_ID'),
-            'client_secret' => env('GOOGLE_FIT_SECRET'),
-        ])->json();
-
-        if (!isset($response['access_token'])) {
-            throw new RuntimeException('Failed to refresh the Google Fit auth token');
-        }
-
-        return (bool) file_put_contents(
-            base_path(self::CREDENTIALS_PATH),
-            json_encode(array_merge($response, ['refresh_token' => $token]), JSON_THROW_ON_ERROR, 512)
-        );
     }
 }

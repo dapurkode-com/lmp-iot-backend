@@ -38,7 +38,7 @@ class FetchGoogleFit extends Command
      */
     public function handle()
     {
-        $this->info('Fetching Google Fit step data');
+        $this->info('Fetching Google Fit data');
 
         $weight = GoogleFitService::make()->getWeight();
         $step = GoogleFitService::make()->getStepCount();
@@ -48,7 +48,7 @@ class FetchGoogleFit extends Command
         $this->info("Weight : $weight kg.");
         $this->info("Step Count : $step step(s).");
         $this->info("Calories Expended : $calories cal.");
-        $this->info("Sleep Hours : $sleep hr(s).");
+        $this->info("Sleep Time : $sleep");
         $this->info("Heart Rate : $heartRate bpm.");
     }
 }
