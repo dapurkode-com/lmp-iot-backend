@@ -86,7 +86,7 @@ class FetchGoogleFit extends Command
                 if ($data_json != null && $data_json != '') {
                     $data = json_decode($data_json);
 
-                    Sleep::createOrUpdate(
+                    Sleep::updateOrCreate(
                         [
                             'start_microtime' => $data->start_microtime,
                             'end_microtime' => $data->end_microtime,
@@ -141,7 +141,7 @@ class FetchGoogleFit extends Command
                 if ($sleep != null && $sleep != '') {
                     $data = json_decode($sleep);
 
-                    Sleep::createOrUpdate(
+                    Sleep::updateOrCreate(
                         [
                             'start_microtime' => $data->start_microtime,
                             'end_microtime' => $data->end_microtime,
