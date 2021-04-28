@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ResouceRequest;
-use App\Http\Resources\WeightCollection;
-use App\Http\Resources\WeightResource;
 use App\Models\Weight;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ResourceRequest;
+use App\Http\Resources\WeightResource;
+use App\Http\Resources\WeightCollection;
 
 class WeightController extends Controller
 {
@@ -16,7 +16,7 @@ class WeightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ResouceRequest $request)
+    public function index(ResourceRequest $request): WeightCollection
     {
         $sort = $request->input('sort', 'DESC');
         $number_item = $request->input('number_item', 5);
@@ -39,7 +39,7 @@ class WeightController extends Controller
      * @param  \App\Models\Weight  $weight
      * @return \Illuminate\Http\Response
      */
-    public function show(Weight $weight)
+    public function show(Weight $weight): WeightResource
     {
         return new WeightResource($weight);
     }
