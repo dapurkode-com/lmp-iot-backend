@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CalorieExpended;
-use App\Models\HeartRate;
-use App\Models\Sleep;
+use Carbon\Carbon;
 use App\Models\Step;
+use App\Models\Sleep;
 use App\Models\Weight;
-use App\Services\GoogleFitService;
+use App\Models\HeartRate;
+use App\Models\CalorieExpended;
 use Illuminate\Console\Command;
+use App\Services\GoogleFitService;
 
 class FetchGoogleFit extends Command
 {
@@ -51,7 +52,7 @@ class FetchGoogleFit extends Command
                 $weight = GoogleFitService::make()->getWeight();
 
                 Weight::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'weight'    => $weight
                 ]);
 
@@ -63,7 +64,7 @@ class FetchGoogleFit extends Command
                 $step = GoogleFitService::make()->getStepCount();
 
                 Step::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'step'    => $step
                 ]);
                 $this->info("Step Count: $step step(s)");
@@ -74,7 +75,7 @@ class FetchGoogleFit extends Command
                 $calorie = GoogleFitService::make()->getCaloriesExpended();
 
                 CalorieExpended::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'calorie'    => $calorie
                 ]);
                 $this->info("Expended: $calorie cal");
@@ -106,7 +107,7 @@ class FetchGoogleFit extends Command
                 $heartRate = GoogleFitService::make()->getHeartRate();
 
                 HeartRate::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'rate'    => $heartRate
                 ]);
                 $this->info("Heart Rate: $heartRate bpm");
@@ -127,15 +128,15 @@ class FetchGoogleFit extends Command
                 $this->info("Heart Rate : $heartRate bpm.");
 
                 Weight::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'weight'    => $weight
                 ]);
                 Step::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'step'    => $step
                 ]);
                 CalorieExpended::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'calorie'    => $calories
                 ]);
                 if ($sleep != null && $sleep != '') {
@@ -153,7 +154,7 @@ class FetchGoogleFit extends Command
                     );
                 }
                 HeartRate::create([
-                    'microtime' => round(microtime(true) * 1000),
+                    'microtime' => round(Carbon::now()->timestamp * 1000),
                     'rate'    => $heartRate
                 ]);
                 break;

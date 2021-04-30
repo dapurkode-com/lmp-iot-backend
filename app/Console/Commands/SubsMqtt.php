@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use App\Models\Ph;
+use Carbon\Carbon;
 use App\Models\Ppm;
 use App\Models\Temperature;
-use Exception;
 use Illuminate\Console\Command;
 use PhpMqtt\Client\Facades\MQTT;
 
@@ -56,7 +57,7 @@ class SubsMqtt extends Command
 
                 echo sprintf("temp: %s ", $data->temperature);
                 Temperature::create([
-                    'microtime'     => $data->microtime ?? round(microtime(true) * 1000),
+                    'microtime'     => $data->microtime ?? round(Carbon::now()->timestamp * 1000),
                     'temperature'   => $data->temperature
                 ]);
             } catch (Exception $e) {
@@ -77,7 +78,7 @@ class SubsMqtt extends Command
 
                 echo sprintf("ph: %s", $data->ph);
                 Ph::create([
-                    'microtime' => $data->microtime ?? round(microtime(true) * 1000),
+                    'microtime' => $data->microtime ?? round(Carbon::now()->timestamp * 1000),
                     'ph' => $data->ph
                 ]);
             } catch (Exception $e) {
@@ -98,7 +99,7 @@ class SubsMqtt extends Command
 
                 echo sprintf("ppm: %s", $data->ppm);
                 Ppm::create([
-                    'microtime' => $data->microtime ?? round(microtime(true) * 1000),
+                    'microtime' => $data->microtime ?? round(Carbon::now()->timestamp * 1000),
                     'ppm'   => $data->ppm
                 ]);
             } catch (Exception $e) {

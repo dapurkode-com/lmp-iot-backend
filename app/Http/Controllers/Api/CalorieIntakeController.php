@@ -9,6 +9,7 @@ use App\Http\Requests\CalorieRequest;
 use App\Http\Requests\ResourceRequest;
 use App\Http\Resources\CalorieResource;
 use App\Http\Resources\CalorieCollection;
+use Carbon\Carbon;
 use Exception;
 
 class CalorieIntakeController extends Controller
@@ -46,7 +47,7 @@ class CalorieIntakeController extends Controller
         try {
             DB::beginTransaction();
             CalorieIntake::create([
-                'microtime' => round(microtime(true) * 1000),
+                'microtime' => Carbon::now()->timestamp * 1000,
                 'calorie'   => $request->calorie
             ]);
             DB::commit();
