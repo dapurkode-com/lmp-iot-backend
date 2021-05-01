@@ -17,3 +17,4 @@ Route::apiResource('weight', App\Http\Controllers\Api\WeightController::class)->
 Route::apiResource('calorie-expended', App\Http\Controllers\Api\CalorieExpendedController::class)->only(['index', 'show']);
 Route::apiResource('calorie-intake', App\Http\Controllers\Api\CalorieIntakeController::class)->only(['index', 'show', 'store']);
 Route::apiResource('heart-rate', App\Http\Controllers\Api\HeartRateController::class)->only(['index', 'show']);
+Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['index', 'show']);

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CalorieResource extends JsonResource
+class PhResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,7 @@ class CalorieResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'calorie'       => $this->calorie,
+            'ph'            => $this->ph,
             'microtime'     => $this->microtime,
             'datetime'      => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d h:i:s')
         ];
