@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\PpmResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class PhCollection extends ResourceCollection
+class PpmCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,7 +17,7 @@ class PhCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'phs' => PhResource::collection($this->collection),
+            'ppms' => PpmResource::collection($this->collection),
             'pagination' => [
                 'total' => $this->total(),
                 'count' => $this->count(),

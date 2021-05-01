@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Ph;
+use App\Models\Ppm;
 use Illuminate\Http\Request;
-use App\Http\Resources\PhResource;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PhCollection;
 use App\Http\Requests\ResourceRequest;
+use App\Http\Resources\PpmCollection;
+use App\Http\Resources\PpmResource;
 
-class PhController extends Controller
+class PpmController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ResourceRequest $request): PhCollection
+    public function index(ResourceRequest $request)
     {
         $sort = $request->input('sort', 'DESC');
         $number_item = $request->input('number_item', 5);
 
-        $query = Ph::orderBy('id', $sort);
+        $query = Ppm::orderBy('id', $sort);
 
         if ($request->has('start_date') && $request->has('end_date')) {
             $query = $query->whereBetween(
@@ -31,17 +31,17 @@ class PhController extends Controller
             );
         }
 
-        return new PhCollection($query->paginate($number_item));
+        return new PpmCollection($query->paginate($number_item));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Ph  $ph
+     * @param  \App\Models\Ppm  $ppm
      * @return \Illuminate\Http\Response
      */
-    public function show(Ph $ph): PhResource
+    public function show(Ppm $ppm): PpmResource
     {
-        return new PhResource($ph);
+        return new PpmResource($ppm);
     }
 }

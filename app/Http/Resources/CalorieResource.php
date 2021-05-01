@@ -19,7 +19,7 @@ class CalorieResource extends JsonResource
             'id'            => $this->id,
             'calorie'       => $this->calorie,
             'microtime'     => $this->microtime,
-            'datetime'      => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d h:i:s')
+            'datetime'      => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d H:i:s')
         ];
     }
 }

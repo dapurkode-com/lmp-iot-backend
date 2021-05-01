@@ -19,7 +19,7 @@ class HeartRateResource extends JsonResource
             'id'        => $this->id,
             'rate'    => $this->rate,
             'microtime' => $this->microtime,
-            'datetime'  => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d h:i:s')
+            'datetime'  => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d H:i:s')
         ];
     }
 
