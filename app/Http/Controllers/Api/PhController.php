@@ -44,4 +44,9 @@ class PhController extends Controller
     {
         return new PhResource($ph);
     }
+
+    public function latest()
+    {
+        return new PhResource(Ph::latest()->firstOrFail());
+    }
 }

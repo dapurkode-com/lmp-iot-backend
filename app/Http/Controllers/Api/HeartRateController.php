@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\HeartRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,5 +44,15 @@ class HeartRateController extends Controller
     public function show(HeartRate $heartRate): HeartRateResource
     {
         return new HeartRateResource($heartRate);
+    }
+
+    public function todayLatest()
+    {
+        $rate = HeartRate::whereBetween(
+            DB::raw('FROM_UNIXTIME(microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('microtime', 'DESC')->firstOrFail();
+
+        return new HeartRateResource($rate);
     }
 }

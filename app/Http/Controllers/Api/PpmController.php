@@ -44,4 +44,9 @@ class PpmController extends Controller
     {
         return new PpmResource($ppm);
     }
+
+    public function latest()
+    {
+        return new PpmResource(Ppm::latest()->firstOrFail());
+    }
 }

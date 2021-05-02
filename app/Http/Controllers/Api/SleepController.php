@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Sleep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,16 @@ class SleepController extends Controller
      */
     public function show(Sleep $sleep): SleepResource
     {
+        return new SleepResource($sleep);
+    }
+
+    public function todayLatest()
+    {
+        $sleep = Sleep::whereBetween(
+            DB::raw('FROM_UNIXTIME(end_microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('end_microtime', 'DESC')->firstOrFail();
+
         return new SleepResource($sleep);
     }
 }

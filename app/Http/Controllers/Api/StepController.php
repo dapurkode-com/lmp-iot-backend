@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Step;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StepResource;
 use App\Http\Requests\ResourceRequest;
 use App\Http\Resources\StepCollection;
-use App\Http\Resources\StepResource;
 
 class StepController extends Controller
 {
@@ -42,6 +42,16 @@ class StepController extends Controller
      */
     public function show(Step $step): StepResource
     {
+        return new StepResource($step);
+    }
+
+    public function todayLatest()
+    {
+        $step = Step::whereBetween(
+            DB::raw('FROM_UNIXTIME(microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('microtime', 'DESC')->firstOrFail();
+
         return new StepResource($step);
     }
 }

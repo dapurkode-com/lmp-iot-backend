@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StockResource;
 use App\Http\Resources\StockCollection;
 use App\Http\Requests\StockResourceRequest;
+use App\Http\Resources\StockSummaryCollection;
 
 class StockController extends Controller
 {
@@ -88,5 +89,36 @@ class StockController extends Controller
     public function show(Stock $stock)
     {
         return new StockResource($stock);
+    }
+
+    public function summary(StockResourceRequest $request)
+    {
+        $sort = $request->input('sort', 'ASC');
+        $number_item = $request->input('number_item', 5);
+
+        $query = Stock::select(DB::raw('`barcode`, `name`, `expired_date`, SUM(CASE WHEN `position`= \'IN\' THEN ABS(stock) ELSE -1 * stock END)  AS summarize_stock'))
+            ->orderBy('expired_date', $sort)
+            ->groupBy('barcode', 'name', 'expired_date');
+
+        $additional = [];
+
+        if ($request->has('range_month') || $request->has('range_day')) {
+            $filter = Carbon::now();
+            if ($request->has('range_month')) {
+                $filter->addMonths($request->range_month);
+            }
+            if ($request->has('range_day')) {
+                $filter->addDays($request->range_day);
+            }
+
+            $query = $query->whereBetween('expired_date', [Carbon::now()->subWeek(), $filter]);
+
+            $additional = [
+                'expired_date_before_equals' => $filter->format('Y-m-d'),
+                'expired_date_after_equals' => Carbon::now()->subWeek()->format('Y-m-d'),
+            ];
+        }
+
+        return (new StockSummaryCollection($query->paginate($number_item)))->additional($additional);
     }
 }

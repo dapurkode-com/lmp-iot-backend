@@ -44,4 +44,9 @@ class TemperatureController extends Controller
     {
         return new TemperatureResource($temperature);
     }
+
+    public function latest()
+    {
+        return new TemperatureResource(Temperature::latest()->first());
+    }
 }

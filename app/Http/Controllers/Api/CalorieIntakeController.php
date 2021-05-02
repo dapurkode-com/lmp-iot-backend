@@ -74,4 +74,14 @@ class CalorieIntakeController extends Controller
     {
         return new CalorieResource($calorieIntake);
     }
+
+    public function todayLatest()
+    {
+        $calorie = CalorieIntake::whereBetween(
+            DB::raw('FROM_UNIXTIME(microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('microtime', 'DESC')->firstOrFail();
+
+        return new CalorieResource($calorie);
+    }
 }

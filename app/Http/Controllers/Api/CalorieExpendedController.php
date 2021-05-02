@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\CalorieExpended;
 use Illuminate\Support\Facades\DB;
@@ -43,5 +44,15 @@ class CalorieExpendedController extends Controller
     public function show(CalorieExpended $calorieExpended): CalorieResource
     {
         return new CalorieResource($calorieExpended);
+    }
+
+    public function todayLatest()
+    {
+        $calorie = CalorieExpended::whereBetween(
+            DB::raw('FROM_UNIXTIME(microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('microtime', 'DESC')->firstOrFail();
+
+        return new CalorieResource($calorie);
     }
 }

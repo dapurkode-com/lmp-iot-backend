@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ResourceRequest;
 use App\Http\Resources\WeightResource;
 use App\Http\Resources\WeightCollection;
+use Carbon\Carbon;
 
 class WeightController extends Controller
 {
@@ -41,6 +42,16 @@ class WeightController extends Controller
      */
     public function show(Weight $weight): WeightResource
     {
+        return new WeightResource($weight);
+    }
+
+    public function todayLatest()
+    {
+        $weight = Weight::whereBetween(
+            DB::raw('FROM_UNIXTIME(microtime / 1000)'),
+            [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()]
+        )->orderBy('microtime', 'DESC')->firstOrFail();
+
         return new WeightResource($weight);
     }
 }
