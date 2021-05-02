@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CalorieRequest extends FormRequest
+class StockRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,11 @@ class CalorieRequest extends FormRequest
     public function rules()
     {
         return [
-            'calorie' => 'required|numeric'
+            'barcode'       => 'nullable|string',
+            'name'          => 'required|string',
+            'expired_date'  => 'required|date',
+            'stock'         => 'required|numeric',
+            'position'      => 'required|in:IN,OUT'
         ];
     }
 
@@ -38,7 +42,10 @@ class CalorieRequest extends FormRequest
     public function attributes()
     {
         return [
-            'calorie' => 'calorie',
+            'barcode'       => 'barcode',
+            'name'          => 'item\'s name',
+            'expired_date'  => 'expired date',
+            'stock'         => 'stock'
         ];
     }
 

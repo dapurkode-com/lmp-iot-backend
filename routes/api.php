@@ -21,3 +21,4 @@ Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['i
 Route::apiResource('ppm', App\Http\Controllers\Api\PpmController::class)->only(['index', 'show']);
 Route::apiResource('sleep', App\Http\Controllers\Api\SleepController::class)->only(['index', 'show']);
 Route::apiResource('step', App\Http\Controllers\Api\StepController::class)->only(['index', 'show']);
+Route::apiResource('stock', App\Http\Controllers\Api\StockController::class)->only(['index', 'show', 'store']);
