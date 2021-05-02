@@ -20,3 +20,4 @@ Route::apiResource('heart-rate', App\Http\Controllers\Api\HeartRateController::c
 Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['index', 'show']);
 Route::apiResource('ppm', App\Http\Controllers\Api\PpmController::class)->only(['index', 'show']);
 Route::apiResource('sleep', App\Http\Controllers\Api\SleepController::class)->only(['index', 'show']);
+Route::apiResource('step', App\Http\Controllers\Api\StepController::class)->only(['index', 'show']);
