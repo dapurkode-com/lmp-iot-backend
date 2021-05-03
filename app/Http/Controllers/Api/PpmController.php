@@ -17,7 +17,7 @@ use App\Http\Resources\PpmResource;
  *
  * @OA\Tag(
  *     name="PPM",
- *     description="Hydrogauges - Controller of PPM"
+ *     description="Hydrogauges - Controller of Water Total Dissolved Solid"
  * )
  */
 class PpmController extends Controller

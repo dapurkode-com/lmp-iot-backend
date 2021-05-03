@@ -705,6 +705,138 @@
                     }
                 }
             }
+        },
+        "/api/sleep": {
+            "get": {
+                "tags": [
+                    "Sleep"
+                ],
+                "summary": "Collection of Sleep Raw Data",
+                "operationId": "sleepIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Sleep",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SleepCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sleep/{id}": {
+            "get": {
+                "tags": [
+                    "Sleep"
+                ],
+                "summary": "Specific Raw Data of Sleep",
+                "operationId": "phShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Sleep Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sleep Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SleepResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/sleep/today": {
+            "get": {
+                "tags": [
+                    "Sleep"
+                ],
+                "summary": "Latest Data of Sleep today",
+                "operationId": "sleepToday",
+                "responses": {
+                    "200": {
+                        "description": "Todays Latest Sleep Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SleepResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -965,6 +1097,63 @@
                     }
                 },
                 "type": "object"
+            },
+            "SleepCollection": {
+                "title": "Sleep Collection",
+                "description": "Sleep collection",
+                "properties": {
+                    "sleeps": {
+                        "description": "Collections of Sleep",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SleepResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "SleepResource": {
+                "title": "Sleep Resource",
+                "description": "Sleep resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "start_microtime": {
+                        "description": "Start of sleep microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "start_datetime": {
+                        "description": "Start of sleep date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    },
+                    "end_microtime": {
+                        "description": "End of sleep microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "end_datetime": {
+                        "description": "End of sleep date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -983,11 +1172,15 @@
         },
         {
             "name": "Ph",
-            "description": "Hydrogauges - Controller of Ph"
+            "description": "Hydrogauges - Controller of Water Acidity"
         },
         {
             "name": "PPM",
-            "description": "Hydrogauges - Controller of PPM"
+            "description": "Hydrogauges - Controller of Water Total Dissolved Solid"
+        },
+        {
+            "name": "Sleep",
+            "description": "Heathlink - Controller of Sleep"
         }
     ],
     "security": [

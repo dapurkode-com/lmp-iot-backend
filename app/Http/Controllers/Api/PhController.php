@@ -17,7 +17,7 @@ use App\Http\Requests\ResourceRequest;
  *
  * @OA\Tag(
  *     name="Ph",
- *     description="Hydrogauges - Controller of Ph"
+ *     description="Hydrogauges - Controller of Water Acidity"
  * )
  */
 class PhController extends Controller
