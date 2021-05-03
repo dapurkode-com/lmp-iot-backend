@@ -18,7 +18,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class StepCollection extends ResourceCollection
 {
     /**
-     * @OA\Property(property="steps", description="Collections of Heart Rate", readOnly="true")
+     * @OA\Property(property="steps", description="Collections of Step", readOnly="true")
      *
      * @var \App\Http\Resources\StepResource[]
      */

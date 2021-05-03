@@ -6,8 +6,23 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @OA\Schema(
+ *      title="Store Stock Request",
+ *      description="Store stock request body data",
+ *      type="object",
+ *      required={"calorie"},
+ * )
+ */
 class StockRequest extends FormRequest
 {
+    /**
+     * @OA\Property(property="barcode", type="string", description="Barcode", readOnly="true", example=7314123152)
+     * @OA\Property(property="name", type="string", description="Item name", readOnly="true", example="Indomie")
+     * @OA\Property(property="position", type="string", description="Stock Position (IN or OUT)", readOnly="true", example="IN")
+     * @OA\Property(property="stock", type="integer", description="Stock amount", readOnly="true", example="5")
+     * @OA\Property(property="expired_date", type="string", format="date", description="Expired date", readOnly="true", example="2021-04-27")
+     */
     /**
      * Determine if the user is authorized to make this request.
      *

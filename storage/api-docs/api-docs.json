@@ -969,6 +969,214 @@
                     }
                 }
             }
+        },
+        "/api/stock": {
+            "get": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Collection of Stock Raw Data",
+                "operationId": "stockIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "range_month",
+                        "in": "query",
+                        "description": "Filter expired date range month from today",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "range_day",
+                        "in": "query",
+                        "description": "Filter expired date range day from today",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Stock",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StockCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Store new Stock",
+                "operationId": "stockStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StockRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/api/stock/{id}": {
+            "get": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Specific Raw Data of Stock",
+                "operationId": "stockShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Stock Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stock Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StockResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/stock/summary": {
+            "get": {
+                "tags": [
+                    "Stock"
+                ],
+                "summary": "Collection of Stock Summary",
+                "operationId": "stockSummary",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "range_month",
+                        "in": "query",
+                        "description": "Filter expired date range month from today",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "range_day",
+                        "in": "query",
+                        "description": "Filter expired date range day from today",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Stock Summary",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StockSummaryCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -992,6 +1200,47 @@
                 "xml": {
                     "name": "StoreCalorie"
                 }
+            },
+            "StockRequest": {
+                "title": "Store Stock Request",
+                "description": "Store stock request body data",
+                "required": [
+                    "calorie"
+                ],
+                "properties": {
+                    "barcode": {
+                        "description": "Barcode",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": 7314123152
+                    },
+                    "name": {
+                        "description": "Item name",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Indomie"
+                    },
+                    "position": {
+                        "description": "Stock Position (IN or OUT)",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "IN"
+                    },
+                    "stock": {
+                        "description": "Stock amount",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "5"
+                    },
+                    "expired_date": {
+                        "description": "Expired date",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": "true",
+                        "example": "2021-04-27"
+                    }
+                },
+                "type": "object"
             },
             "CalorieCollection": {
                 "title": "Calorie Collection",
@@ -1292,7 +1541,7 @@
                 "description": "Step collection",
                 "properties": {
                     "steps": {
-                        "description": "Collections of Heart Rate",
+                        "description": "Collections of Step",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/StepResource"
@@ -1336,6 +1585,118 @@
                     }
                 },
                 "type": "object"
+            },
+            "StockCollection": {
+                "title": "Stock Collection",
+                "description": "Stock collection",
+                "properties": {
+                    "stocks": {
+                        "description": "Collections of Stock",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StockResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "StockResource": {
+                "title": "Stock Resource",
+                "description": "Stock resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "barcode": {
+                        "description": "Barcode",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": 7314123152
+                    },
+                    "name": {
+                        "description": "Item name",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Indomie"
+                    },
+                    "position": {
+                        "description": "Stock Position (IN or OUT)",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "IN"
+                    },
+                    "stock": {
+                        "description": "Stock amount",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "5"
+                    },
+                    "expired_date": {
+                        "description": "Expired date",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": "true",
+                        "example": "2021-04-27"
+                    }
+                },
+                "type": "object"
+            },
+            "StockSummaryCollection": {
+                "title": "Stock Summary Collection",
+                "description": "Stock Summary collection",
+                "properties": {
+                    "stocks": {
+                        "description": "Collections of Stock",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StockSummaryResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "StockSummaryResource": {
+                "title": "Stock Summary Resource",
+                "description": "Stock Summary resource",
+                "properties": {
+                    "barcode": {
+                        "description": "Barcode",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": 7314123152
+                    },
+                    "name": {
+                        "description": "Item name",
+                        "type": "string",
+                        "readOnly": "true",
+                        "example": "Indomie"
+                    },
+                    "stock": {
+                        "description": "Stock amount",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": "5"
+                    },
+                    "expired_date": {
+                        "description": "Expired date",
+                        "type": "string",
+                        "format": "date",
+                        "readOnly": "true",
+                        "example": "2021-04-27"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -1367,6 +1728,10 @@
         {
             "name": "Step",
             "description": "Heathlink - Controller of Step"
+        },
+        {
+            "name": "Stock",
+            "description": "RAMZ - Controller of Stock"
         }
     ],
     "security": [

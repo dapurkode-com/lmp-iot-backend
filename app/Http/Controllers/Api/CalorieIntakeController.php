@@ -133,7 +133,6 @@ class CalorieIntakeController extends Controller
      *      ),
      * )
      */
-
     public function store(CalorieRequest $request): string
     {
         try {
