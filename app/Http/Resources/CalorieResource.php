@@ -11,11 +11,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @package Resource
  *
  * @OA\Schema(
- *      title="CalorieResource",
+ *      title="Calorie Resource",
  *      description="Calorie resource",
- *      @OA\Xml(
- *          name="CalorieResource"
- *      ),
  * )
  */
 class CalorieResource extends JsonResource

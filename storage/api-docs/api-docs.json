@@ -309,6 +309,138 @@
                     }
                 }
             }
+        },
+        "/api/heart-rate": {
+            "get": {
+                "tags": [
+                    "Heart Rate"
+                ],
+                "summary": "Collection of Heart Rate Raw Data",
+                "operationId": "heartRateIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Heart Rate",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HeartRateCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/heart-rate/{id}": {
+            "get": {
+                "tags": [
+                    "Heart Rate"
+                ],
+                "summary": "Specific Raw Data of Heart Rate",
+                "operationId": "calorieExpendedShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Heart Rate Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Heart Rate Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HeartRateResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/heart-rate/today": {
+            "get": {
+                "tags": [
+                    "Heart Rate"
+                ],
+                "summary": "Latest Data of Heart Rate today",
+                "operationId": "calorieExpendedToday",
+                "responses": {
+                    "200": {
+                        "description": "Heart Rate Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HeartRateResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -334,11 +466,11 @@
                 }
             },
             "CalorieCollection": {
-                "title": "CalorieCollection",
+                "title": "Calorie Collection",
                 "description": "Calorie collection",
                 "properties": {
                     "calories": {
-                        "description": "Id of collection",
+                        "description": "Collections of Calories",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/CalorieResource"
@@ -349,13 +481,10 @@
                         "$ref": "#/components/schemas/PaginationResource"
                     }
                 },
-                "type": "object",
-                "xml": {
-                    "name": "CalorieCollection"
-                }
+                "type": "object"
             },
             "CalorieResource": {
-                "title": "CalorieResource",
+                "title": "Calorie Resource",
                 "description": "Calorie resource",
                 "properties": {
                     "id": {
@@ -384,10 +513,57 @@
                         "example": "2021-04-27 00:13:26"
                     }
                 },
-                "type": "object",
-                "xml": {
-                    "name": "CalorieResource"
-                }
+                "type": "object"
+            },
+            "HeartRateCollection": {
+                "title": "Heart Rate Collection",
+                "description": "Heart Rate collection",
+                "properties": {
+                    "rates": {
+                        "description": "Collections of Heart Rate",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HeartRateResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "HeartRateResource": {
+                "title": "Heart Rate Resource",
+                "description": "Heart Rate resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "rate": {
+                        "description": "Calorie",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 72
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             },
             "PaginationResource": {
                 "title": "PaginationResource",
@@ -436,6 +612,10 @@
         {
             "name": "Calorie Intake",
             "description": "Dieat - Controller of Calorie Intake"
+        },
+        {
+            "name": "Heart Rate",
+            "description": "Healthlink - Controller of Heart Rate"
         }
     ],
     "security": [

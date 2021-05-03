@@ -11,17 +11,14 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
  * @package Resource
  *
  * @OA\Schema(
- *      title="CalorieCollection",
+ *      title="Calorie Collection",
  *      description="Calorie collection",
- *      @OA\Xml(
- *          name="CalorieCollection"
- *      ),
  * )
  */
 class CalorieCollection extends ResourceCollection
 {
     /**
-     * @OA\Property(property="calories", description="Id of collection", readOnly="true")
+     * @OA\Property(property="calories", description="Collections of Calories", readOnly="true")
      *
      * @var \App\Http\Resources\CalorieResource[]
      */
