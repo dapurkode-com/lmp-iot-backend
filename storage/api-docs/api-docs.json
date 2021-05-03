@@ -1309,6 +1309,138 @@
                     }
                 }
             }
+        },
+        "/api/weight": {
+            "get": {
+                "tags": [
+                    "Weight"
+                ],
+                "summary": "Collection of Weight Raw Data",
+                "operationId": "weightIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Weight",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WeightCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/weight/{id}": {
+            "get": {
+                "tags": [
+                    "Weight"
+                ],
+                "summary": "Specific Raw Data of Weight",
+                "operationId": "phShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Weight Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Weight Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WeightResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/weight/today": {
+            "get": {
+                "tags": [
+                    "Weight"
+                ],
+                "summary": "Latest Data of Weight today",
+                "operationId": "weightToday",
+                "responses": {
+                    "200": {
+                        "description": "Todays Latest Weight Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WeightResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1880,6 +2012,57 @@
                     }
                 },
                 "type": "object"
+            },
+            "WeightCollection": {
+                "title": "Weight Collection",
+                "description": "Weight collection",
+                "properties": {
+                    "weights": {
+                        "description": "Collections of Weights",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/WeightResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "WeightResource": {
+                "title": "Weight Resource",
+                "description": "Weight resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "weight": {
+                        "description": "Weight",
+                        "type": "number",
+                        "format": "float",
+                        "readOnly": "true",
+                        "example": 53.02
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -1919,6 +2102,10 @@
         {
             "name": "Temperature",
             "description": "Hydrogauges - Controller of Water Temperature"
+        },
+        {
+            "name": "Weight",
+            "description": "Heathlink - Controller of Weight"
         }
     ],
     "security": [

@@ -10,12 +10,85 @@ use App\Http\Resources\WeightResource;
 use App\Http\Resources\WeightCollection;
 use Carbon\Carbon;
 
+/**
+ * Weight Controller
+ *
+ * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
+ *
+ * @OA\Tag(
+ *     name="Weight",
+ *     description="Heathlink - Controller of Weight"
+ * )
+ */
 class WeightController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Weight Index
      *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *      path="/api/weight",
+     *      tags={"Weight"},
+     *      summary="Collection of Weight Raw Data",
+     *      operationId="weightIndex",
+     *
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="Sorting type",
+     *          allowEmptyValue=true,
+     *          explode=true,
+     *          @OA\Schema(
+     *              type="array",
+     *              default="DESC",
+     *              @OA\Items(
+     *                  type="string",
+     *                  enum = {"ASC", "DESC"},
+     *              )
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="number_item",
+     *          in="query",
+     *          description="Number of collection item per one page",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              minimum=1,
+     *              default=5
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="start_date",
+     *          in="query",
+     *          description="Filter microtime start date. Must be together with end_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="end_date",
+     *          in="query",
+     *          description="Filter microtime end date. Must be together with start_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Collections of Weight",
+     *          @OA\JsonContent(ref="#/components/schemas/WeightCollection")
+     *      ),
+     * )
+     *
+     *
+     *
+     * @param ResourceRequest $request
+     * @return WeightCollection
      */
     public function index(ResourceRequest $request): WeightCollection
     {
@@ -35,16 +108,62 @@ class WeightController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/api/weight/{id}",
+     *      tags={"Weight"},
+     *      summary="Specific Raw Data of Weight",
+     *      operationId="phShow",
      *
-     * @param  \App\Models\Weight  $weight
-     * @return \Illuminate\Http\Response
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="Weight Id",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          example=1
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Weight Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/WeightResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @param Weight $weight
+     * @return WeightResource
      */
     public function show(Weight $weight): WeightResource
     {
         return new WeightResource($weight);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/weight/today",
+     *      tags={"Weight"},
+     *      summary="Latest Data of Weight today",
+     *      operationId="weightToday",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Todays Latest Weight Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/WeightResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @return WeightResource
+     */
     public function todayLatest()
     {
         $weight = Weight::whereBetween(
