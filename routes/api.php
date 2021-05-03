@@ -35,9 +35,9 @@ Route::get('ph/latest', [App\Http\Controllers\Api\PhController::class, 'latest']
 Route::get('ppm/latest', [App\Http\Controllers\Api\PpmController::class, 'latest'])->name('ppm.latest');
 Route::get('temperature/latest', [App\Http\Controllers\Api\TemperatureController::class, 'latest'])->name('temperature.latest');
 
-Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['index', 'show']);
-Route::apiResource('ppm', App\Http\Controllers\Api\PpmController::class)->only(['index', 'show']);
-Route::apiResource('temperature', App\Http\Controllers\Api\TemperatureController::class)->only(['index', 'show']);
+Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['index', 'show', 'store']);
+Route::apiResource('ppm', App\Http\Controllers\Api\PpmController::class)->only(['index', 'show', 'store']);
+Route::apiResource('temperature', App\Http\Controllers\Api\TemperatureController::class)->only(['index', 'show', 'store']);
 
 // RAM Z
 Route::get('stock/summary', [App\Http\Controllers\Api\StockController::class, 'summary'])->name('stock.summary');

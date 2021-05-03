@@ -120,7 +120,7 @@ class CalorieIntakeController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/CalorieRequest")
      *      ),
      *      @OA\Response(
-     *          response=201,
+     *          response=200,
      *          description="Successful operation",
      *       ),
      *      @OA\Response(

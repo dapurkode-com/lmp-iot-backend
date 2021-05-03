@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Temperature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ResourceRequest;
-use App\Http\Resources\TemperatureCollection;
+use App\Http\Requests\TemperatureRequest;
 use App\Http\Resources\TemperatureResource;
+use App\Http\Resources\TemperatureCollection;
 
 /**
  * Temperature Controller
@@ -108,6 +110,52 @@ class TemperatureController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/temperature",
+     *      operationId="TemperatureStore",
+     *      tags={"Temperature"},
+     *      summary="Store new temperature",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/TemperatureRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Error"
+     *      ),
+     * )
+     */
+    public function store(TemperatureRequest $request): string
+    {
+        try {
+            DB::beginTransaction();
+            Temperature::create([
+                'microtime' => Carbon::now()->timestamp * 1000,
+                'temperature'   => $request->temperature
+            ]);
+            DB::commit();
+            return response()->json([
+                'status'    => 'ok',
+                'message'   => 'Success inserting data.'
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'    => 'failed',
+                'message'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * @OA\Get(
      *      path="/api/temperature/{id}",
      *      tags={"Temperature"},
@@ -136,7 +184,7 @@ class TemperatureController extends Controller
      *      )
      * )
      *
-     * @param Ppm $temperature
+     * @param Temperature $temperature
      * @return TemperatureResource
      */
     public function show(Temperature $temperature)

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\Ppm;
 use Illuminate\Http\Request;
+use App\Http\Requests\PpmRequest;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ResourceRequest;
-use App\Http\Resources\PpmCollection;
 use App\Http\Resources\PpmResource;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PpmCollection;
+use App\Http\Requests\ResourceRequest;
 
 /**
  * PPM Controller
@@ -105,6 +107,52 @@ class PpmController extends Controller
         }
 
         return new PpmCollection($query->paginate($number_item));
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/ppm",
+     *      operationId="PpmStore",
+     *      tags={"PPM"},
+     *      summary="Store new ppm",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/PpmRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Error"
+     *      ),
+     * )
+     */
+    public function store(PpmRequest $request): string
+    {
+        try {
+            DB::beginTransaction();
+            Ppm::create([
+                'microtime' => Carbon::now()->timestamp * 1000,
+                'ppm'   => $request->ppm
+            ]);
+            DB::commit();
+            return response()->json([
+                'status'    => 'ok',
+                'message'   => 'Success inserting data.'
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'    => 'failed',
+                'message'   => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

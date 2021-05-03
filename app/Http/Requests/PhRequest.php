@@ -8,30 +8,27 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 /**
  * @OA\Schema(
- *      title="Store Calorie Request",
- *      description="Store calorie request body data",
+ *      title="Store Ph Request",
+ *      description="Store ph request body data",
  *      type="object",
- *      required={"calorie"},
+ *      required={"ph"},
  *      @OA\Xml(
- *          name="StoreCalorie"
+ *          name="StorePh"
  *      ),
  * )
  */
-class CalorieRequest extends FormRequest
+class PhRequest extends FormRequest
 {
-
     /**
      * @OA\Property(
-     *      property="calorie",
-     *      description="Calorie",
+     *      property="ph",
+     *      description="Ph",
      *      type="number",
-     *      format="float",
-     *      example=42.03
+     *      example=7
      * )
      *
-     * @var float
+     * @var integer
      */
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -50,19 +47,7 @@ class CalorieRequest extends FormRequest
     public function rules()
     {
         return [
-            'calorie' => 'required|numeric'
-        ];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'calorie' => 'calorie',
+            'ph' => 'required|integer|min:1|max:14'
         ];
     }
 

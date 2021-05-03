@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use App\Models\Ph;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Requests\PhRequest;
 use App\Http\Resources\PhResource;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -105,6 +108,52 @@ class PhController extends Controller
         }
 
         return new PhCollection($query->paginate($number_item));
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/ph",
+     *      operationId="PhStore",
+     *      tags={"Ph"},
+     *      summary="Store new ph",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/PhRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Error"
+     *      ),
+     * )
+     */
+    public function store(PhRequest $request): string
+    {
+        try {
+            DB::beginTransaction();
+            Ph::create([
+                'microtime' => Carbon::now()->timestamp * 1000,
+                'ph'   => $request->ph
+            ]);
+            DB::commit();
+            return response()->json([
+                'status'    => 'ok',
+                'message'   => 'Success inserting data.'
+            ], 201);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status'    => 'failed',
+                'message'   => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
