@@ -14,7 +14,9 @@ LMP IoT Dashboard adalah aplikasi website yang nantinya akan dipasang pada Intel
 Pastikan Anda sudah menginstall :
 
 -[PHP ( _min 7.4.\*_ )](https://www.php.net/downloads.php)
+
 -[MySQL Server](https://dev.mysql.com/downloads/mysql/)
+
 -[Composer](https://getcomposer.org/download/)
 
 ## Langkah-langkah dalam pengaplikasian sistem
