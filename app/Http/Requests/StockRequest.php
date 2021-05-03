@@ -60,6 +60,6 @@ class StockRequest extends FormRequest
             ->json([
                 'status' => 'invalid',
                 'validators' => $validator->errors(),
-            ]));
+            ], 400));
     }
 }

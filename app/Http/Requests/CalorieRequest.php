@@ -6,8 +6,33 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @OA\Schema(
+ *      title="Store Calorie Request",
+ *      description="Store calorie request body data",
+ *      type="object",
+ *      required={"calorie"},
+ *      @OA\Xml(
+ *          name="StoreCalorie"
+ *      ),
+ * )
+ */
 class CalorieRequest extends FormRequest
 {
+
+    /**
+     * @OA\Property(
+     *      title="calorie",
+     *      description="Calorie",
+     *      type="number",
+     *      format="float",
+     *      example=42.03
+     * )
+     *
+     * @var float
+     */
+    public $calorie;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -53,6 +78,6 @@ class CalorieRequest extends FormRequest
             ->json([
                 'status' => 'invalid',
                 'validators' => $validator->errors(),
-            ]));
+            ], 400));
     }
 }

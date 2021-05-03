@@ -51,6 +51,7 @@
                         "allowEmptyValue": true,
                         "schema": {
                             "type": "integer",
+                            "default": 5,
                             "minimum": 1
                         }
                     },
@@ -104,7 +105,8 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 1
                     }
                 ],
                 "responses": {
@@ -147,10 +149,190 @@
                     }
                 }
             }
+        },
+        "/api/calorie-intake": {
+            "get": {
+                "tags": [
+                    "Calorie Intake"
+                ],
+                "summary": "Collection of Calorie Intake Raw Data",
+                "operationId": "calorieIntakeIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Calorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Calorie Intake"
+                ],
+                "summary": "Store new Calorie Intake",
+                "operationId": "CalorieIntakeStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CalorieRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/api/calorie-intake/{id}": {
+            "get": {
+                "tags": [
+                    "Calorie Intake"
+                ],
+                "summary": "Specific Raw Data of Calorie Intake",
+                "operationId": "calorieIntakeShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Calorie Intake Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Calorie Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/calorie-intake/today": {
+            "get": {
+                "tags": [
+                    "Calorie Intake"
+                ],
+                "summary": "Lastest Calorie Intake today",
+                "operationId": "calorieIntakeTodayLatest",
+                "responses": {
+                    "200": {
+                        "description": "Calorie Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "CalorieRequest": {
+                "title": "Store Calorie Request",
+                "description": "Store calorie request body data",
+                "required": [
+                    "calorie"
+                ],
+                "properties": {
+                    "calorie": {
+                        "title": "calorie",
+                        "description": "Calorie",
+                        "type": "number",
+                        "format": "float",
+                        "example": 42.03
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreCalorie"
+                }
+            },
             "CalorieCollection": {
                 "title": "CalorieCollection",
                 "description": "Calorie collection",
@@ -179,23 +361,27 @@
                     "id": {
                         "description": "Id of collection",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 1
                     },
                     "calorie": {
                         "description": "Calorie",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 43.02
                     },
                     "microtime": {
                         "description": "Microtime format",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 1619453606584
                     },
                     "datetime": {
                         "description": "Date time format",
                         "type": "string",
                         "format": "date-time",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
                     }
                 },
                 "type": "object",
@@ -210,27 +396,32 @@
                     "total": {
                         "description": "Total of collection",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 5
                     },
                     "count": {
                         "description": "Count of collection",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 15
                     },
                     "per_page": {
                         "description": "Total per page of collection",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 5
                     },
                     "current_page": {
                         "description": "Current number page",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 1
                     },
                     "total_pages": {
                         "description": "Total number of page",
                         "type": "integer",
-                        "readOnly": "true"
+                        "readOnly": "true",
+                        "example": 3
                     }
                 },
                 "type": "object"
@@ -241,6 +432,10 @@
         {
             "name": "Calorie Expended",
             "description": "Healthlink - Controller of Calorie Expended"
+        },
+        {
+            "name": "Calorie Intake",
+            "description": "Dieat - Controller of Calorie Intake"
         }
     ],
     "security": [

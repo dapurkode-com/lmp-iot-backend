@@ -54,7 +54,8 @@ class CalorieExpendedController extends Controller
      *          allowEmptyValue=true,
      *          @OA\Schema(
      *              type="integer",
-     *              minimum=1
+     *              minimum=1,
+     *              default=5
      *         )
      *      ),
      *      @OA\Parameter(
@@ -121,7 +122,8 @@ class CalorieExpendedController extends Controller
      *          required=true,
      *          @OA\Schema(
      *              type="integer",
-     *          )
+     *          ),
+     *          example=1
      *      ),
      *
      *      @OA\Response(
