@@ -6,8 +6,29 @@ use App\Http\Resources\TemperatureResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Temperature Collection
+ * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
+ * @package Resource
+ *
+ * @OA\Schema(
+ *      title="Temperature Collection",
+ *      description="Temperature collection",
+ * )
+ */
 class TemperatureCollection extends ResourceCollection
 {
+    /**
+     * @OA\Property(property="temperatures", description="Collections of Temperatures", readOnly="true")
+     *
+     * @var \App\Http\Resources\TemperatureResource[]
+     */
+
+    /**
+     * @OA\Property(property="pagination", description="pagination", readOnly="true")
+     *
+     * @var \App\Http\Resources\PaginationResource
+     */
     /**
      * Transform the resource collection into an array.
      *

@@ -148,8 +148,8 @@ class PpmController extends Controller
      * @OA\Get(
      *      path="/api/ppm/latest",
      *      tags={"PPM"},
-     *      summary="Latest Data of PPM today",
-     *      operationId="ppmToday",
+     *      summary="Latest Data of PPM",
+     *      operationId="ppmLatest",
      *
      *      @OA\Response(
      *          response=200,

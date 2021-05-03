@@ -148,8 +148,8 @@ class PhController extends Controller
      * @OA\Get(
      *      path="/api/ph/latest",
      *      tags={"Ph"},
-     *      summary="Latest Data of Ph today",
-     *      operationId="phToday",
+     *      summary="Latest Data of Ph",
+     *      operationId="phLatest",
      *
      *      @OA\Response(
      *          response=200,

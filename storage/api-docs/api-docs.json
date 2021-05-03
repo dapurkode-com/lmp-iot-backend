@@ -555,8 +555,8 @@
                 "tags": [
                     "Ph"
                 ],
-                "summary": "Latest Data of Ph today",
-                "operationId": "phToday",
+                "summary": "Latest Data of Ph",
+                "operationId": "phLatest",
                 "responses": {
                     "200": {
                         "description": "Ph Raw Data",
@@ -687,8 +687,8 @@
                 "tags": [
                     "PPM"
                 ],
-                "summary": "Latest Data of PPM today",
-                "operationId": "ppmToday",
+                "summary": "Latest Data of PPM",
+                "operationId": "ppmLatest",
                 "responses": {
                     "200": {
                         "description": "PPM Raw Data",
@@ -1174,6 +1174,138 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/temperature": {
+            "get": {
+                "tags": [
+                    "Temperature"
+                ],
+                "summary": "Collection of Temperature Raw Data",
+                "operationId": "heartRateIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Temperature",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemperatureCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/temperature/{id}": {
+            "get": {
+                "tags": [
+                    "Temperature"
+                ],
+                "summary": "Specific Raw Data of Temperature",
+                "operationId": "temperatureShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Temperature Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Temperature Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemperatureResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/temperature/latest": {
+            "get": {
+                "tags": [
+                    "Temperature"
+                ],
+                "summary": "Latest Data of Temperature",
+                "operationId": "temperatureLatest",
+                "responses": {
+                    "200": {
+                        "description": "Temperature Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemperatureResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
                     }
                 }
             }
@@ -1697,6 +1829,57 @@
                     }
                 },
                 "type": "object"
+            },
+            "TemperatureCollection": {
+                "title": "Temperature Collection",
+                "description": "Temperature collection",
+                "properties": {
+                    "temperatures": {
+                        "description": "Collections of Temperatures",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TemperatureResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "TemperatureResource": {
+                "title": "Temperature Resource",
+                "description": "Temperature resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "temperature": {
+                        "description": "Temperature",
+                        "type": "number",
+                        "format": "float",
+                        "readOnly": "true",
+                        "example": 53.02
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -1732,6 +1915,10 @@
         {
             "name": "Stock",
             "description": "RAMZ - Controller of Stock"
+        },
+        {
+            "name": "Temperature",
+            "description": "Hydrogauges - Controller of Water Temperature"
         }
     ],
     "security": [
