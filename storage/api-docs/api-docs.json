@@ -1,0 +1,249 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "LMP IoT Dashboard API Documentations",
+        "contact": {
+            "email": "i.g.b.n.satyawibawa@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Localhost API Server"
+        },
+        {
+            "url": "http://lmp.dapurkode.com",
+            "description": "Dapurkode LMP API Server"
+        }
+    ],
+    "paths": {
+        "/api/calorie-expended": {
+            "get": {
+                "tags": [
+                    "Calorie Expended"
+                ],
+                "summary": "Collection of Calorie Expended Raw Data",
+                "operationId": "calorieExpendedIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Calorie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/calorie-expended/{id}": {
+            "get": {
+                "tags": [
+                    "Calorie Expended"
+                ],
+                "summary": "Specific Raw Data of Calorie Expended",
+                "operationId": "calorieExpendedShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Calorie Expended Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Calorie Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/calorie-expended/today": {
+            "get": {
+                "tags": [
+                    "Calorie Expended"
+                ],
+                "summary": "Lastest Calorie Expended today",
+                "operationId": "calorieExpendedTodayLatest",
+                "responses": {
+                    "200": {
+                        "description": "Calorie Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CalorieResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CalorieCollection": {
+                "title": "CalorieCollection",
+                "description": "Calorie collection",
+                "properties": {
+                    "calories": {
+                        "description": "Id of collection",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CalorieResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CalorieCollection"
+                }
+            },
+            "CalorieResource": {
+                "title": "CalorieResource",
+                "description": "Calorie resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "calorie": {
+                        "description": "Calorie",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CalorieResource"
+                }
+            },
+            "PaginationResource": {
+                "title": "PaginationResource",
+                "description": "Pagination resource",
+                "properties": {
+                    "total": {
+                        "description": "Total of collection",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "count": {
+                        "description": "Count of collection",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "per_page": {
+                        "description": "Total per page of collection",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "current_page": {
+                        "description": "Current number page",
+                        "type": "integer",
+                        "readOnly": "true"
+                    },
+                    "total_pages": {
+                        "description": "Total number of page",
+                        "type": "integer",
+                        "readOnly": "true"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Calorie Expended",
+            "description": "Healthlink - Controller of Calorie Expended"
+        }
+    ],
+    "security": [
+        []
+    ]
+}
