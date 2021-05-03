@@ -10,12 +10,85 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PhCollection;
 use App\Http\Requests\ResourceRequest;
 
+/**
+ * Ph Controller
+ *
+ * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
+ *
+ * @OA\Tag(
+ *     name="Ph",
+ *     description="Hydrogauges - Controller of Ph"
+ * )
+ */
 class PhController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Ph Index
      *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *      path="/api/ph",
+     *      tags={"Ph"},
+     *      summary="Collection of Ph Raw Data",
+     *      operationId="heartRateIndex",
+     *
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="Sorting type",
+     *          allowEmptyValue=true,
+     *          explode=true,
+     *          @OA\Schema(
+     *              type="array",
+     *              default="DESC",
+     *              @OA\Items(
+     *                  type="string",
+     *                  enum = {"ASC", "DESC"},
+     *              )
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="number_item",
+     *          in="query",
+     *          description="Number of collection item per one page",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              minimum=1,
+     *              default=5
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="start_date",
+     *          in="query",
+     *          description="Filter microtime start date. Must be together with end_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="end_date",
+     *          in="query",
+     *          description="Filter microtime end date. Must be together with start_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Collections of Ph",
+     *          @OA\JsonContent(ref="#/components/schemas/PhCollection")
+     *      ),
+     * )
+     *
+     *
+     *
+     * @param ResourceRequest $request
+     * @return PhCollection
      */
     public function index(ResourceRequest $request): PhCollection
     {
@@ -35,16 +108,63 @@ class PhController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/api/ph/{id}",
+     *      tags={"Ph"},
+     *      summary="Specific Raw Data of Ph",
+     *      operationId="phShow",
      *
-     * @param  \App\Models\Ph  $ph
-     * @return \Illuminate\Http\Response
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="Ph Id",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          example=1
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Ph Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/PhResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @param HeartRate $heartRate
+     * @return PhResource
      */
     public function show(Ph $ph): PhResource
     {
         return new PhResource($ph);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/ph/latest",
+     *      tags={"Ph"},
+     *      summary="Latest Data of Ph today",
+     *      operationId="phToday",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Ph Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/PhResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @param HeartRate $heartRate
+     * @return PhResource
+     */
     public function latest()
     {
         return new PhResource(Ph::latest()->firstOrFail());

@@ -24,7 +24,7 @@ use App\Http\Resources\HeartRateCollection;
 class HeartRateController extends Controller
 {
     /**
-     * Heart Rate Expended Index
+     * Heart Rate Index
      *
      * @OA\Get(
      *      path="/api/heart-rate",
@@ -113,7 +113,7 @@ class HeartRateController extends Controller
      *      path="/api/heart-rate/{id}",
      *      tags={"Heart Rate"},
      *      summary="Specific Raw Data of Heart Rate",
-     *      operationId="calorieExpendedShow",
+     *      operationId="heartRateShow",
      *
      *      @OA\Parameter(
      *          name="id",
@@ -150,7 +150,7 @@ class HeartRateController extends Controller
      *      path="/api/heart-rate/today",
      *      tags={"Heart Rate"},
      *      summary="Latest Data of Heart Rate today",
-     *      operationId="calorieExpendedToday",
+     *      operationId="heartRateToday",
      *
      *      @OA\Response(
      *          response=200,

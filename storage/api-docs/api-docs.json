@@ -388,7 +388,7 @@
                     "Heart Rate"
                 ],
                 "summary": "Specific Raw Data of Heart Rate",
-                "operationId": "calorieExpendedShow",
+                "operationId": "heartRateShow",
                 "parameters": [
                     {
                         "name": "id",
@@ -424,7 +424,7 @@
                     "Heart Rate"
                 ],
                 "summary": "Latest Data of Heart Rate today",
-                "operationId": "calorieExpendedToday",
+                "operationId": "heartRateToday",
                 "responses": {
                     "200": {
                         "description": "Heart Rate Raw Data",
@@ -432,6 +432,138 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/HeartRateResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/ph": {
+            "get": {
+                "tags": [
+                    "Ph"
+                ],
+                "summary": "Collection of Ph Raw Data",
+                "operationId": "heartRateIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Ph",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PhCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ph/{id}": {
+            "get": {
+                "tags": [
+                    "Ph"
+                ],
+                "summary": "Specific Raw Data of Ph",
+                "operationId": "phShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Ph Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ph Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PhResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/ph/latest": {
+            "get": {
+                "tags": [
+                    "Ph"
+                ],
+                "summary": "Latest Data of Ph today",
+                "operationId": "phToday",
+                "responses": {
+                    "200": {
+                        "description": "Ph Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PhResource"
                                 }
                             }
                         }
@@ -566,7 +698,7 @@
                 "type": "object"
             },
             "PaginationResource": {
-                "title": "PaginationResource",
+                "title": "Pagination Resource",
                 "description": "Pagination resource",
                 "properties": {
                     "total": {
@@ -601,6 +733,56 @@
                     }
                 },
                 "type": "object"
+            },
+            "PhCollection": {
+                "title": "Ph Collection",
+                "description": "Ph collection",
+                "properties": {
+                    "phs": {
+                        "description": "Collections of Ph",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PhResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "PhResource": {
+                "title": "Ph Resource",
+                "description": "Ph resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "ph": {
+                        "description": "Water Ph",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 7
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -616,6 +798,10 @@
         {
             "name": "Heart Rate",
             "description": "Healthlink - Controller of Heart Rate"
+        },
+        {
+            "name": "Ph",
+            "description": "Hydrogauges - Controller of Ph"
         }
     ],
     "security": [

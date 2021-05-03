@@ -8,7 +8,7 @@ namespace App\Http\Resources;
  * @package Resource
  *
  * @OA\Schema(
- *      title="PaginationResource",
+ *      title="Pagination Resource",
  *      description="Pagination resource"
  * )
  *
