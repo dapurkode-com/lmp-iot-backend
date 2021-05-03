@@ -10,12 +10,85 @@ use App\Http\Resources\StepResource;
 use App\Http\Requests\ResourceRequest;
 use App\Http\Resources\StepCollection;
 
+/**
+ * Step Controller
+ *
+ * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
+ *
+ * @OA\Tag(
+ *     name="Step",
+ *     description="Heathlink - Controller of Step"
+ * )
+ */
 class StepController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Step Index
      *
-     * @return \Illuminate\Http\Response
+     * @OA\Get(
+     *      path="/api/step",
+     *      tags={"Step"},
+     *      summary="Collection of Step Raw Data",
+     *      operationId="stepIndex",
+     *
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="Sorting type",
+     *          allowEmptyValue=true,
+     *          explode=true,
+     *          @OA\Schema(
+     *              type="array",
+     *              default="DESC",
+     *              @OA\Items(
+     *                  type="string",
+     *                  enum = {"ASC", "DESC"},
+     *              )
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="number_item",
+     *          in="query",
+     *          description="Number of collection item per one page",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *              minimum=1,
+     *              default=5
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="start_date",
+     *          in="query",
+     *          description="Filter microtime start date. Must be together with end_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *      @OA\Parameter(
+     *          name="end_date",
+     *          in="query",
+     *          description="Filter microtime end date. Must be together with start_date",
+     *          allowEmptyValue=true,
+     *          @OA\Schema(
+     *              type="string",
+     *              format="date"
+     *         )
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Collections of Step",
+     *          @OA\JsonContent(ref="#/components/schemas/StepCollection")
+     *      ),
+     * )
+     *
+     *
+     *
+     * @param ResourceRequest $request
+     * @return StepCollection
      */
     public function index(ResourceRequest $request): StepCollection
     {
@@ -35,16 +108,62 @@ class StepController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *      path="/api/step/{id}",
+     *      tags={"Step"},
+     *      summary="Specific Raw Data of Step",
+     *      operationId="phShow",
      *
-     * @param  \App\Models\Step  $step
-     * @return \Illuminate\Http\Response
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="Step Id",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="integer",
+     *          ),
+     *          example=1
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Step Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/StepResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @param Step $step
+     * @return StepResource
      */
     public function show(Step $step): StepResource
     {
         return new StepResource($step);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/step/today",
+     *      tags={"Step"},
+     *      summary="Latest Data of Step today",
+     *      operationId="stepToday",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="Todays Latest Step Raw Data",
+     *          @OA\JsonContent(ref="#/components/schemas/StepResource")
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Data not found"
+     *      )
+     * )
+     *
+     * @return StepResource
+     */
     public function todayLatest()
     {
         $step = Step::whereBetween(

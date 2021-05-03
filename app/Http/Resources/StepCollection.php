@@ -5,8 +5,30 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Step Collection
+ * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
+ * @package Resource
+ *
+ * @OA\Schema(
+ *      title="Step Collection",
+ *      description="Step collection",
+ * )
+ */
 class StepCollection extends ResourceCollection
 {
+    /**
+     * @OA\Property(property="steps", description="Collections of Heart Rate", readOnly="true")
+     *
+     * @var \App\Http\Resources\StepResource[]
+     */
+
+    /**
+     * @OA\Property(property="pagination", description="pagination", readOnly="true")
+     *
+     * @var \App\Http\Resources\PaginationResource
+     */
+
     /**
      * Transform the resource collection into an array.
      *
@@ -16,7 +38,7 @@ class StepCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'sleeps' => StepResource::collection($this->collection),
+            'steps' => StepResource::collection($this->collection),
             'pagination' => [
                 'total' => $this->total(),
                 'count' => $this->count(),

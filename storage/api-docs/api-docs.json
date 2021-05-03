@@ -837,6 +837,138 @@
                     }
                 }
             }
+        },
+        "/api/step": {
+            "get": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Collection of Step Raw Data",
+                "operationId": "stepIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Step",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StepCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/step/{id}": {
+            "get": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Specific Raw Data of Step",
+                "operationId": "phShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Step Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Step Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StepResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/step/today": {
+            "get": {
+                "tags": [
+                    "Step"
+                ],
+                "summary": "Latest Data of Step today",
+                "operationId": "stepToday",
+                "responses": {
+                    "200": {
+                        "description": "Todays Latest Step Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StepResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1154,6 +1286,56 @@
                     }
                 },
                 "type": "object"
+            },
+            "StepCollection": {
+                "title": "Step Collection",
+                "description": "Step collection",
+                "properties": {
+                    "steps": {
+                        "description": "Collections of Heart Rate",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StepResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "StepResource": {
+                "title": "Step Resource",
+                "description": "Step resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "step": {
+                        "description": "Step",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 72
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -1181,6 +1363,10 @@
         {
             "name": "Sleep",
             "description": "Heathlink - Controller of Sleep"
+        },
+        {
+            "name": "Step",
+            "description": "Heathlink - Controller of Step"
         }
     ],
     "security": [
