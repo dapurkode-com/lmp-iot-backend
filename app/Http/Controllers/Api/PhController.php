@@ -29,7 +29,7 @@ class PhController extends Controller
      *      path="/api/ph",
      *      tags={"Ph"},
      *      summary="Collection of Ph Raw Data",
-     *      operationId="heartRateIndex",
+     *      operationId="phIndex",
      *
      *      @OA\Parameter(
      *          name="sort",
@@ -136,7 +136,7 @@ class PhController extends Controller
      *      )
      * )
      *
-     * @param HeartRate $heartRate
+     * @param Ph $ph
      * @return PhResource
      */
     public function show(Ph $ph): PhResource
@@ -162,7 +162,6 @@ class PhController extends Controller
      *      )
      * )
      *
-     * @param HeartRate $heartRate
      * @return PhResource
      */
     public function latest()

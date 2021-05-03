@@ -448,7 +448,7 @@
                     "Ph"
                 ],
                 "summary": "Collection of Ph Raw Data",
-                "operationId": "heartRateIndex",
+                "operationId": "phIndex",
                 "parameters": [
                     {
                         "name": "sort",
@@ -564,6 +564,138 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/PhResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/ppm": {
+            "get": {
+                "tags": [
+                    "PPM"
+                ],
+                "summary": "Collection of PPM Raw Data",
+                "operationId": "heartRateIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of PPM",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PpmCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ppm/{id}": {
+            "get": {
+                "tags": [
+                    "PPM"
+                ],
+                "summary": "Specific Raw Data of PPM",
+                "operationId": "ppmShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "PPM Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PPM Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PpmResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/ppm/latest": {
+            "get": {
+                "tags": [
+                    "PPM"
+                ],
+                "summary": "Latest Data of PPM today",
+                "operationId": "ppmToday",
+                "responses": {
+                    "200": {
+                        "description": "PPM Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PpmResource"
                                 }
                             }
                         }
@@ -783,6 +915,56 @@
                     }
                 },
                 "type": "object"
+            },
+            "PpmCollection": {
+                "title": "Ppm Collection",
+                "description": "Ppm collection",
+                "properties": {
+                    "ppms": {
+                        "description": "Collections of Ppm",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PpmResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "PpmResource": {
+                "title": "Ppm Resource",
+                "description": "Ppm resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "ppm": {
+                        "description": "Water PPM",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 53
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -802,6 +984,10 @@
         {
             "name": "Ph",
             "description": "Hydrogauges - Controller of Ph"
+        },
+        {
+            "name": "PPM",
+            "description": "Hydrogauges - Controller of PPM"
         }
     ],
     "security": [
