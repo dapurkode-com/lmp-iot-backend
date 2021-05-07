@@ -42,3 +42,5 @@ Route::apiResource('temperature', App\Http\Controllers\Api\TemperatureController
 // RAM Z
 Route::get('stock/summary', [App\Http\Controllers\Api\StockController::class, 'summary'])->name('stock.summary');
 Route::apiResource('stock', App\Http\Controllers\Api\StockController::class)->only(['index', 'show', 'store']);
+
+Route::post('hydrogauges', [App\Http\Controllers\Api\HydrogaugesController::class, 'store'])->name('hydro.store');

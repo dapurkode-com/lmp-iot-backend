@@ -442,6 +442,36 @@
                 }
             }
         },
+        "/api/hydrogauges": {
+            "post": {
+                "tags": [
+                    "Hydrogauges"
+                ],
+                "summary": "Store new hydrogauges",
+                "operationId": "HydrogaugesStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HydrogaugesRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
         "/api/ph": {
             "get": {
                 "tags": [
@@ -1548,6 +1578,37 @@
                     "name": "StoreCalorie"
                 }
             },
+            "HydrogaugesRequest": {
+                "title": "Store Hydrogauge Request",
+                "description": "Store Hydrogauge batch request body data",
+                "required": [
+                    "ph",
+                    "ppm",
+                    "temperature"
+                ],
+                "properties": {
+                    "temperature": {
+                        "description": "temperature",
+                        "type": "number",
+                        "format": "float",
+                        "example": 38.03
+                    },
+                    "ph": {
+                        "description": "Ph",
+                        "type": "number",
+                        "example": 7
+                    },
+                    "ppm": {
+                        "description": "Ppm",
+                        "type": "number",
+                        "example": 100
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreHydro"
+                }
+            },
             "PhRequest": {
                 "title": "Store Ph Request",
                 "description": "Store ph request body data",
@@ -2216,6 +2277,10 @@
         {
             "name": "Heart Rate",
             "description": "Healthlink - Controller of Heart Rate"
+        },
+        {
+            "name": "Hydrogauges",
+            "description": "Hydrogauges - Controller"
         },
         {
             "name": "Ph",
