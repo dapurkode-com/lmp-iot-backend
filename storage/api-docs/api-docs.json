@@ -1136,7 +1136,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "$ref": "#/components/schemas/StockRequest"
                             }
@@ -1646,45 +1646,54 @@
                 }
             },
             "StockRequest": {
-                "title": "Store Stock Request",
+                "title": "StockRequest",
                 "description": "Store stock request body data",
                 "required": [
-                    "calorie"
+                    "barcode",
+                    "image_file",
+                    "name",
+                    "position",
+                    "stock",
+                    "expired_date"
                 ],
                 "properties": {
                     "barcode": {
                         "description": "Barcode",
                         "type": "string",
-                        "readOnly": "true",
-                        "example": 7314123152
+                        "example": "7314123152"
+                    },
+                    "image_file": {
+                        "description": "Image stock",
+                        "type": "string",
+                        "format": "binary",
+                        "example": "7314123152"
                     },
                     "name": {
                         "description": "Item name",
                         "type": "string",
-                        "readOnly": "true",
                         "example": "Indomie"
                     },
                     "position": {
                         "description": "Stock Position (IN or OUT)",
                         "type": "string",
-                        "readOnly": "true",
                         "example": "IN"
                     },
                     "stock": {
                         "description": "Stock amount",
                         "type": "integer",
-                        "readOnly": "true",
                         "example": "5"
                     },
                     "expired_date": {
                         "description": "Expired date",
                         "type": "string",
                         "format": "date",
-                        "readOnly": "true",
                         "example": "2021-04-27"
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "xml": {
+                    "name": "StockRequest"
+                }
             },
             "TemperatureRequest": {
                 "title": "Store Ph Request",

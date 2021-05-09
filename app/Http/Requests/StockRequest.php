@@ -8,20 +8,40 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 /**
  * @OA\Schema(
- *      title="Store Stock Request",
+ *      title="StockRequest",
  *      description="Store stock request body data",
  *      type="object",
- *      required={"calorie"},
+ *      required={"barcode", "image_file", "name", "position", "stock","expired_date"},
+ *      @OA\Xml(
+ *          name="StockRequest"
+ *      ),
  * )
  */
 class StockRequest extends FormRequest
 {
     /**
-     * @OA\Property(property="barcode", type="string", description="Barcode", readOnly="true", example=7314123152)
-     * @OA\Property(property="name", type="string", description="Item name", readOnly="true", example="Indomie")
-     * @OA\Property(property="position", type="string", description="Stock Position (IN or OUT)", readOnly="true", example="IN")
-     * @OA\Property(property="stock", type="integer", description="Stock amount", readOnly="true", example="5")
-     * @OA\Property(property="expired_date", type="string", format="date", description="Expired date", readOnly="true", example="2021-04-27")
+     * @OA\Property(property="barcode", type="string", description="Barcode", example="7314123152")
+     * @var string
+     */
+    /**
+     * @OA\Property(property="image_file", type="string", format="binary", description="Image stock", example="7314123152")
+     * @var string
+     */
+    /**
+     * @OA\Property(property="name", type="string", description="Item name", example="Indomie")
+     *  @var string
+     */
+    /**
+     * @OA\Property(property="position", type="string", description="Stock Position (IN or OUT)", example="IN")
+     * * @var string
+     */
+    /**
+     * @OA\Property(property="stock", type="integer", description="Stock amount",  example="5")
+     * @var integer
+     */
+    /**
+     * @OA\Property(property="expired_date", type="string", format="date", description="Expired date", example="2021-04-27")
+     * @var string
      */
     /**
      * Determine if the user is authorized to make this request.
@@ -42,6 +62,7 @@ class StockRequest extends FormRequest
     {
         return [
             'barcode'       => 'nullable|string',
+            'image_file'    => 'required|image',
             'name'          => 'required|string',
             'expired_date'  => 'required|date',
             'stock'         => 'required|numeric',

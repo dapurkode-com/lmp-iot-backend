@@ -130,7 +130,12 @@ class StockController extends Controller
      *      summary="Store new Stock",
      *      @OA\RequestBody(
      *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/StockRequest")
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  ref="#/components/schemas/StockRequest"
+     *              )
+     *          )
      *      ),
      *      @OA\Response(
      *          response=201,
@@ -150,13 +155,19 @@ class StockController extends Controller
     {
         try {
             DB::beginTransaction();
-            Stock::create($request->only([
+            if ($request->hasFile('image_file')) {
+                $request->image_file->store('public/image_stock');
+            }
+            $data  = $request->only([
                 'barcode',
                 'name',
                 'expired_date',
                 'stock',
-                'position'
-            ]));
+                'position',
+            ]);
+
+            $data['image_file'] = $request->image_file->getClientOriginalName();
+            Stock::create($data);
             DB::commit();
             return response()->json([
                 'status'    => 'ok',

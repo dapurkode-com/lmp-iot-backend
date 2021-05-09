@@ -9,7 +9,7 @@ class Stock extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['barcode', 'name', 'expired_date', 'stock', 'position'];
+    protected $fillable = ['barcode', 'name', 'expired_date', 'stock', 'position', 'image_file'];
     protected $cast = [
         'expired_date' => 'date',
         'stock' => 'integer'
