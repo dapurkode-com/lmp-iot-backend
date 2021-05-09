@@ -9,12 +9,12 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000",
-            "description": "Localhost API Server"
+            "url": "http://lmp.dapurkode.com",
+            "description": "Dapurkode API Server"
         },
         {
-            "url": "http://lmp.dapurkode.com",
-            "description": "Dapurkode LMP API Server"
+            "url": "http://localhost:8000",
+            "description": "Local Testing Server"
         }
     ],
     "paths": {

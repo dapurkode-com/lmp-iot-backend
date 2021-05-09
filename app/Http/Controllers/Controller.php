@@ -17,12 +17,12 @@ use Illuminate\Routing\Controller as BaseController;
  * )
  *
  * @OA\Server(
- *      url=LOCALHOST,
- *      description="Localhost API Server"
+ *      url=DAPURKODE_WEB,
+ *      description="Dapurkode API Server"
  * )
  * @OA\Server(
- *      url=DAPURKODE_WEB,
- *      description="Dapurkode LMP API Server"
+ *      url=LOCALHOST,
+ *      description="Local Testing Server"
  * )
  *
  */

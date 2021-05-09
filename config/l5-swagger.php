@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'LMP IoT Dashboard',
+                'title' => 'LMP IoT Dashboard API Documentation',
             ],
 
             'routes' => [
