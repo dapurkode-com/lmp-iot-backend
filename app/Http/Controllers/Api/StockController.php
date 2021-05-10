@@ -156,7 +156,7 @@ class StockController extends Controller
         try {
             DB::beginTransaction();
             if ($request->hasFile('image_file')) {
-                $request->file("image_file")->move(public_path(config('app.stock_image_path')));
+                $request->file("image_file")->move(public_path(config('app.stock_image_path')), $request->image_file->getClientOriginalName());
             }
             $data  = $request->only([
                 'barcode',
