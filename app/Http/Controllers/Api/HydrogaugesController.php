@@ -10,6 +10,7 @@ use App\Models\Temperature;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HydrogaugesRequest;
+use App\Models\Ppm;
 
 /**
  * Hydrogauges Controller
@@ -55,7 +56,7 @@ class HydrogaugesController extends Controller
                 'microtime' => Carbon::now()->timestamp * 1000,
                 'ph'   => $request->ph
             ]);
-            Hydrogauges::create([
+            Ppm::create([
                 'microtime' => Carbon::now()->timestamp * 1000,
                 'ppm'   => $request->ppm
             ]);
