@@ -155,9 +155,6 @@ class StockController extends Controller
     {
         try {
             DB::beginTransaction();
-            if ($request->hasFile('image_file')) {
-                $request->file("image_file")->move(public_path(config('app.stock_image_path')), $request->image_file->getClientOriginalName());
-            }
             $data  = $request->only([
                 'barcode',
                 'name',
@@ -165,8 +162,11 @@ class StockController extends Controller
                 'stock',
                 'position',
             ]);
-
-            $data['image_file'] = $request->image_file->getClientOriginalName();
+            if ($request->hasFile('image_file')) {
+                $file_name = time() . '.' . $request->file('image_file')->extension();
+                $request->file("image_file")->move(public_path(config('app.stock_image_path')), $file_name);
+                $data['image_file'] = $file_name;
+            }
             Stock::create($data);
             DB::commit();
             return response()->json([
