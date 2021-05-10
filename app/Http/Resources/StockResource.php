@@ -23,6 +23,8 @@ class StockResource extends JsonResource
      * @OA\Property(property="position", type="string", description="Stock Position (IN or OUT)", readOnly="true", example="IN")
      * @OA\Property(property="stock", type="integer", description="Stock amount", readOnly="true", example="5")
      * @OA\Property(property="expired_date", type="string", format="date", description="Expired date", readOnly="true", example="2021-04-27")
+     * @OA\Property(property="image_file", type="string", description="Name of Image")
+     * @OA\Property(property="image_url", type="string", description="Name of Image")
      */
     /**
      * Transform the resource into an array.
@@ -32,13 +34,16 @@ class StockResource extends JsonResource
      */
     public function toArray($request)
     {
+        $path = config('app.stock_image_path');
         return [
             'id'            => $this->id,
             'barcode'       => $this->barcode,
             'name'          => $this->name,
             'expired_date'  => $this->expired_date,
             'stock'         => $this->stock,
-            'position'      => $this->position
+            'position'      => $this->position,
+            'image_file'    => $this->image_file,
+            'image_url'     => url("/$path/$this->image_file")
         ];
     }
 }

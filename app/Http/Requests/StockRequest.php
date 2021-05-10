@@ -62,7 +62,7 @@ class StockRequest extends FormRequest
     {
         return [
             'barcode'       => 'nullable|string',
-            'image_file'    => 'required|image',
+            'image_file'    => 'mimes:jpeg,jpg,png,gif|required|max:10000',
             'name'          => 'required|string',
             'expired_date'  => 'required|date',
             'stock'         => 'required|numeric',

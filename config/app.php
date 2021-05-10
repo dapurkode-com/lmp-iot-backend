@@ -230,4 +230,8 @@ return [
 
     ],
 
+    // LMP Custome Config
+
+    'stock_image_path' => 'stock_image'
+
 ];
