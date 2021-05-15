@@ -47,7 +47,7 @@ class ConductivityResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'ph'            => $this->conductivity,
+            'conductivity'  => $this->conductivity,
             'microtime'     => $this->microtime,
             'datetime'      => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d H:i:s')
         ];
