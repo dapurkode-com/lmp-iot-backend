@@ -6,16 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Ph Resource
+ * Conductivity Resource
  * @author Satya Wibawa <i.g.b.n.satyawibawa@gmail.com>
  * @package Resource
  *
  * @OA\Schema(
- *      title="Ph Resource",
- *      description="Ph resource",
+ *      title="Conductivity Resource",
+ *      description="Conductivity resource",
  * )
  */
-class PhResource extends JsonResource
+class ConductivityResource extends JsonResource
 {
     /**
      * @OA\Property(property="id", type="integer", description="Id of collection", readOnly="true", example=1)
@@ -23,7 +23,7 @@ class PhResource extends JsonResource
      * @var number
      */
     /**
-     * @OA\Property(property="ph", type="integer", description="Water Ph", readOnly="true", example=7)
+     * @OA\Property(property="conductivity", type="integer", description="Electrical conductivity", readOnly="true", example=3.5)
      *
      * @var number
      */
@@ -47,7 +47,7 @@ class PhResource extends JsonResource
     {
         return [
             'id'            => $this->id,
-            'ph'            => $this->ph,
+            'ph'            => $this->conductivity,
             'microtime'     => $this->microtime,
             'datetime'      => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d H:i:s')
         ];

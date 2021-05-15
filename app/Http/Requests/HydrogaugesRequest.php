@@ -51,6 +51,16 @@ class HydrogaugesRequest extends FormRequest
      * @var integer
      */
     /**
+     * @OA\Property(
+     *      property="conductivity",
+     *      description="Electrical conductivity",
+     *      type="number",
+     *      example=7.5
+     * )
+     *
+     * @var float
+     */
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -70,7 +80,8 @@ class HydrogaugesRequest extends FormRequest
         return [
             'ppm' => 'required|numeric|min:0|max:1200',
             'ph' => 'required|integer|min:1|max:14',
-            'temperature' => 'required|numeric|max:100'
+            'temperature' => 'required|numeric|max:100',
+            'conductivity'  => 'required|numeric|min:0|max:10'
         ];
     }
 

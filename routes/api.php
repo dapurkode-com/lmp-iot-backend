@@ -32,10 +32,12 @@ Route::apiResource('calorie-intake', App\Http\Controllers\Api\CalorieIntakeContr
 
 // Hydro
 Route::get('ph/latest', [App\Http\Controllers\Api\PhController::class, 'latest'])->name('ph.latest');
+Route::get('conductivity/latest', [App\Http\Controllers\Api\ConductivityController::class, 'latest'])->name('conductivity.latest');
 Route::get('ppm/latest', [App\Http\Controllers\Api\PpmController::class, 'latest'])->name('ppm.latest');
 Route::get('temperature/latest', [App\Http\Controllers\Api\TemperatureController::class, 'latest'])->name('temperature.latest');
 
 Route::apiResource('ph', App\Http\Controllers\Api\PhController::class)->only(['index', 'show', 'store']);
+Route::apiResource('conductivity', App\Http\Controllers\Api\ConductivityController::class)->only(['index', 'show', 'store']);
 Route::apiResource('ppm', App\Http\Controllers\Api\PpmController::class)->only(['index', 'show', 'store']);
 Route::apiResource('temperature', App\Http\Controllers\Api\TemperatureController::class)->only(['index', 'show', 'store']);
 

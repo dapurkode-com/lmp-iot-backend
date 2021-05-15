@@ -10,6 +10,7 @@ use App\Models\Temperature;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HydrogaugesRequest;
+use App\Models\Conductivity;
 use App\Models\Ppm;
 
 /**
@@ -52,17 +53,22 @@ class HydrogaugesController extends Controller
     {
         try {
             DB::beginTransaction();
+            $microtime = Carbon::now()->timestamp * 1000;
             Ph::create([
-                'microtime' => Carbon::now()->timestamp * 1000,
+                'microtime' => $microtime,
                 'ph'   => $request->ph
             ]);
             Ppm::create([
-                'microtime' => Carbon::now()->timestamp * 1000,
+                'microtime' => $microtime,
                 'ppm'   => $request->ppm
             ]);
             Temperature::create([
-                'microtime' => Carbon::now()->timestamp * 1000,
+                'microtime' => $microtime,
                 'temperature'   => $request->temperature
+            ]);
+            Conductivity::create([
+                'microtime'     => $microtime,
+                'conductivity'  => $request->conductivity
             ]);
             DB::commit();
             return response()->json([

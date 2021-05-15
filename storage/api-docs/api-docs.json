@@ -310,6 +310,166 @@
                 }
             }
         },
+        "/api/conductivity": {
+            "get": {
+                "tags": [
+                    "Conductivity"
+                ],
+                "summary": "Collection of Conductivity Raw Data",
+                "operationId": "conductivityIndex",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sorting type",
+                        "allowEmptyValue": true,
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ASC",
+                                    "DESC"
+                                ]
+                            },
+                            "default": "DESC"
+                        }
+                    },
+                    {
+                        "name": "number_item",
+                        "in": "query",
+                        "description": "Number of collection item per one page",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 5,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter microtime start date. Must be together with end_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter microtime end date. Must be together with start_date",
+                        "allowEmptyValue": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Collections of Conductivity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConductivityCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Conductivity"
+                ],
+                "summary": "Store new conductivity",
+                "operationId": "ConductivityStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConductivityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/api/conductivity/{id}": {
+            "get": {
+                "tags": [
+                    "Conductivity"
+                ],
+                "summary": "Specific Raw Data of Conductivity",
+                "operationId": "conductivityShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Conductivity Id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Conductivity Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConductivityResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
+        "/api/conductivity/latest": {
+            "get": {
+                "tags": [
+                    "Conductivity"
+                ],
+                "summary": "Latest Data of Conductivity",
+                "operationId": "conductivityLatest",
+                "responses": {
+                    "200": {
+                        "description": "Conductivity Raw Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConductivityResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Data not found"
+                    }
+                }
+            }
+        },
         "/api/heart-rate": {
             "get": {
                 "tags": [
@@ -1578,6 +1738,24 @@
                     "name": "StoreCalorie"
                 }
             },
+            "ConductivityRequest": {
+                "title": "Store Conductivity Request",
+                "description": "Store conductivity request body data",
+                "required": [
+                    "conductivity"
+                ],
+                "properties": {
+                    "conductivity": {
+                        "description": "Conductivity",
+                        "type": "number",
+                        "example": 3.5
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreConductivity"
+                }
+            },
             "HydrogaugesRequest": {
                 "title": "Store Hydrogauge Request",
                 "description": "Store Hydrogauge batch request body data",
@@ -1602,6 +1780,11 @@
                         "description": "Ppm",
                         "type": "number",
                         "example": 100
+                    },
+                    "conductivity": {
+                        "description": "Electrical conductivity",
+                        "type": "number",
+                        "example": 7.5
                     }
                 },
                 "type": "object",
@@ -1747,6 +1930,56 @@
                         "type": "integer",
                         "readOnly": "true",
                         "example": 43.02
+                    },
+                    "microtime": {
+                        "description": "Microtime format",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1619453606584
+                    },
+                    "datetime": {
+                        "description": "Date time format",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": "true",
+                        "example": "2021-04-27 00:13:26"
+                    }
+                },
+                "type": "object"
+            },
+            "ConductivityCollection": {
+                "title": "Conductivity Collection",
+                "description": "Conductivity collection",
+                "properties": {
+                    "conductivities": {
+                        "description": "Collections of Conductivity",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ConductivityResource"
+                        },
+                        "readOnly": "true"
+                    },
+                    "pagination": {
+                        "$ref": "#/components/schemas/PaginationResource"
+                    }
+                },
+                "type": "object"
+            },
+            "ConductivityResource": {
+                "title": "Conductivity Resource",
+                "description": "Conductivity resource",
+                "properties": {
+                    "id": {
+                        "description": "Id of collection",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 1
+                    },
+                    "conductivity": {
+                        "description": "Electrical conductivity",
+                        "type": "integer",
+                        "readOnly": "true",
+                        "example": 3.5
                     },
                     "microtime": {
                         "description": "Microtime format",
@@ -2116,6 +2349,14 @@
                         "format": "date",
                         "readOnly": "true",
                         "example": "2021-04-27"
+                    },
+                    "image_file": {
+                        "description": "Name of Image",
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "description": "Name of Image",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -2282,6 +2523,10 @@
         {
             "name": "Calorie Intake",
             "description": "Dieat - Controller of Calorie Intake"
+        },
+        {
+            "name": "Conductivity",
+            "description": "Hydrogauges - Controller of Electrical Conductivity"
         },
         {
             "name": "Heart Rate",
