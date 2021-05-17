@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         $schedule->command('mygooglefit:fetch')->hourly();
+        $schedule->command('ramz:notify')->dailyAt('08:00');
     }
 
     /**
