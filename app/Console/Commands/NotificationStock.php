@@ -131,10 +131,10 @@ class NotificationStock extends Command
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'Authorization' => 'basic Mjk0YTBkOGEtZTNmYi00YjY5LTgyNGItYTAzMmM4MjExNTIy',
+            'Authorization' => 'basic ' . env('ONE_SIGNAL_KEY'),
             'charset' => 'utf-8'
         ])->post('https://onesignal.com/api/v1/notifications', [
-            'app_id' => '59d3b9ea-5470-4c23-956a-6fedbfa2f4ee',
+            'app_id' => env('ONE_SIGNAL_APP_ID'),
             'included_segments' => [
                 'Subscribed Users'
             ],
