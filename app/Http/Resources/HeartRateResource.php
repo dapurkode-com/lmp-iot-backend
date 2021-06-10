@@ -45,10 +45,26 @@ class HeartRateResource extends JsonResource
      */
     public function toArray($request)
     {
+        $mood = [];
+
+        if (120 > $this->rate && $this->rate > 91) {
+            array_push($mood, 'Neutral');
+        }
+        if (119 > $this->rate && $this->rate > 90) {
+            array_push($mood, 'Happy');
+        }
+        if (108 > $this->rate && $this->rate > 75) {
+            array_push($mood, 'Sad');
+        }
+
         return [
             'id'        => $this->id,
-            'rate'    => $this->rate,
+            'rate'      => $this->rate,
             'microtime' => $this->microtime,
+            'mood_text' => implode(', ', $mood),
+            'neutral'   => in_array('Neutral', $mood) ? round(100 / count($mood)) : 0,
+            'happy'   => in_array('Happy', $mood) ? round(100 / count($mood)) : 0,
+            'sad'   => in_array('Sad', $mood) ? round(100 / count($mood)) : 0,
             'datetime'  => Carbon::parse((int) ($this->microtime / 1000))->timezone(config('app.timezone'))->format('Y-m-d H:i:s')
         ];
     }
