@@ -58,4 +58,4 @@ Jalankan aplikasi dengan menggunakan sintaks _**php artisan serve**_ .
 
 ## Dokumentasi
 
-Dokumentasi dari REST API aplikasi dapat dilihat pada  [halaman /api/docs](/api/docs) setelah menjalankan aplikasi.
+Dokumentasi dari REST API aplikasi dapat dilihat pada halaman [/api/docs](/api/docs) setelah menjalankan aplikasi.
