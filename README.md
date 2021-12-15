@@ -1,61 +1,80 @@
+<p align="center">
+    <img alt="Laravel" src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white">
+    <img alt="MySQL" src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white">
+</p>
+
 # LMP IoT Dashboard
 
 IntelliFlector adalah sebuah smart device yang berbentuk mirror, hardware yang digunakan adalah monitor yang dipasangkan di belakang cermin 2 arah dan menampilkan berbagai informasi yang berkaitan dengan device smart home seperti konsumsi daya dari device smart home dan juga bisa untuk mengontrol device tersebut.
 
 LMP IoT Dashboard adalah aplikasi website yang nantinya akan dipasang pada IntelliFlector. Dashboard ini berfungsi mengumpulkan dan menampilkan data dari berbagai modul yang nantinya terpasang pada IntelliFlector.
 
-- [LMP IoT Dashboard](#lmp-iot-dashboard)
-  - [Requirement Aplikasi](#requirement-aplikasi)
-  - [Langkah-langkah dalam pengaplikasian sistem](#langkah-langkah-dalam-pengaplikasian-sistem)
-  - [Dokumentasi](#dokumentasi)
+**Daftar isi**
+- [Requirement Aplikasi](#requirement-aplikasi)
+- [Framework yang digunakan](#framework-yang-digunakan)
+- [Langkah-langkah dalam pengaplikasian sistem](#langkah-langkah-dalam-pengaplikasian-sistem)
+- [Dokumentasi](#dokumentasi)
+- [Catatan](#catatan)
+- [Kontak](#kontak)
 
 ## Requirement Aplikasi
 
 Pastikan Anda sudah menginstall :
 
--[PHP ( _min 7.4.\*_ )](https://www.php.net/downloads.php)
+- [PHP ( _min 7.4.\*_ )](https://www.php.net/downloads.php)
 
--[MySQL Server](https://dev.mysql.com/downloads/mysql/)
+- [MySQL Server](https://dev.mysql.com/downloads/mysql/)
 
--[Composer](https://getcomposer.org/download/)
+- [Composer](https://getcomposer.org/download/)
+
+
+## Framework yang digunakan
+
+- [Framework Laravel versi 8](https://laravel.com/docs/8.x)
 
 ## Langkah-langkah dalam pengaplikasian sistem
 
 Berikut adalah langkah-langkah yang harus dilakukan untuk mengaplikasikan sistem ini.
 
-**1. Download vendor-vendor PHP.**
+#### 1. Clone repository
 
-Jalankan sintaks _**composer install**_.
+Lakukan sintaks _clone repository_ seperti sintaks dibawah ini.
 
-**2. Buat file _.env_**
+    git clone https://github.com/dapurkode-com/lmp-stock-watcher.git
 
-Buat file baru dengan nama _.env_ dengan isi file menyalin konten dari file _.env.example_ . Sesuaikan pada bagian konfigurasi database dan MQTT Broker.
+atau dengan mengunduh _repository_ ini kemudian _extract zip file_.
 
-    DB_CONNECTION=mysql
+#### 2. Download vendor-vendor PHP.
+
+Masuk ke dalam _folder repository_  kemudian jalankan sintaks `composer install`.
+
+#### 3. Buat file _.env_
+
+Buat file baru dengan nama _.env_ dengan isi file menyalin konten dari file _.env.example_ . Sesuaikan pada bagian konfigurasi berikut ini.
+
     DB_HOST=127.0.0.1
     DB_PORT=3306
     DB_DATABASE=laravel
     DB_USERNAME=root
     DB_PASSWORD=
-    
-    MQTT_HOST=
-    MQTT_PORT=
-    MQTT_TLS_ENABLED=
-    MQTT_AUTH_USERNAME=
-    MQTT_AUTH_PASSWORD=
 
-**3. Generate key.**
+#### 4. Generate key
 
-Generate key encryption aplikasi dengan menjalankan sintaks _**php artisan key:generate**_
+_Generate key encryption_ aplikasi dengan menjalankan sintaks `php artisan key:generate`.
 
-**4. Jalankan migrasi database dan seeder.**
+#### 5. Jalankan migrasi _database_ dan _seeder_
 
-Jalankan sintaks _**php artisan migrate --seed**_ untuk melakukan migrasi database dan seeding.
-
-**5. Jalankan aplikasi.**
-
-Jalankan aplikasi dengan menggunakan sintaks _**php artisan serve**_ .
+Setelah anda memastikan pengaturan basis data di _file .env_ telah sesuai, jalankan sintaks `php artisan migrate --seed` untuk melakukan migrasi.
 
 ## Dokumentasi
 
-Dokumentasi dari REST API aplikasi dapat dilihat pada halaman [/api/docs](/api/docs) setelah menjalankan aplikasi.
+Dokumentasi dari REST API aplikasi dapat dilihat pada halaman `/api/docs` setelah menjalankan aplikasi. Anda juga bisa mengunduh dokumentasi seluruh sistem melalui [link ini](documentation/Dokumentasi.pdf).
+
+## Catatan
+
+Beberapa catatan penting yang perlu diingat.
+- Untuk menjalankan aplikasi secara lokal, jalankan sintak `php artisan serve` dan program akan berjalan di `http://localhost:8000`.
+- Untuk menjalankan aplikasi secara cloud, silahkan kontak programmer ataupun _system admin_.
+
+## Kontak
+> Jika mengalami kendala silahkan kirim _email_ melalui [i.g.b.n.satyawibawa@gmail.com](mailto:i.g.b.n.satyawibawa@gmail.com)
