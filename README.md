@@ -9,13 +9,13 @@ IntelliFlector adalah sebuah smart device yang berbentuk mirror, hardware yang d
 
 LMP IoT Dashboard adalah aplikasi website yang nantinya akan dipasang pada IntelliFlector. Dashboard ini berfungsi mengumpulkan dan menampilkan data dari berbagai modul yang nantinya terpasang pada IntelliFlector.
 
-**Daftar isi**
-- [Requirement Aplikasi](#requirement-aplikasi)
-- [Framework yang digunakan](#framework-yang-digunakan)
-- [Langkah-langkah dalam pengaplikasian sistem](#langkah-langkah-dalam-pengaplikasian-sistem)
-- [Dokumentasi](#dokumentasi)
-- [Catatan](#catatan)
-- [Kontak](#kontak)
+> **Daftar isi**
+>- [Requirement Aplikasi](#requirement-aplikasi)
+>- [Framework yang digunakan](#framework-yang-digunakan)
+>- [Langkah-langkah dalam pengaplikasian sistem](#langkah-langkah-dalam-pengaplikasian-sistem)
+>- [Dokumentasi](#dokumentasi)
+>- [Catatan](#catatan)
+>- [Kontak](#kontak)
 
 ## Requirement Aplikasi
 
