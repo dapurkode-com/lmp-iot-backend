@@ -74,7 +74,7 @@ Untuk mensinkronasi aplikasi terhadap Google Fit, Anda perlu masuk kedalam Googl
 
 ## Dokumentasi
 
-Dokumentasi dari REST API aplikasi dapat dilihat pada halaman `/api/docs` setelah menjalankan aplikasi. Anda juga bisa mengunduh dokumentasi seluruh sistem melalui [link ini](docs/files/Dokumentasi.pdf).
+Dokumentasi dari REST API aplikasi dapat dilihat pada halaman [/api/docs](https://dapurkode-com.github.io/lmp-iot-backend/docs/) setelah menjalankan aplikasi. Anda juga bisa mengunduh dokumentasi seluruh sistem melalui [link ini](docs/files/Dokumentasi.pdf).
 
 ## Catatan
 
