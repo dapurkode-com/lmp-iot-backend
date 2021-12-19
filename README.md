@@ -3,7 +3,7 @@
     <img alt="MySQL" src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white">
 </p>
 
-# LMP IoT Dashboard
+# LMP IoT Dashboard - Back End
 
 IntelliFlector adalah sebuah smart device yang berbentuk mirror, hardware yang digunakan adalah monitor yang dipasangkan di belakang cermin 2 arah dan menampilkan berbagai informasi yang berkaitan dengan device smart home seperti konsumsi daya dari device smart home dan juga bisa untuk mengontrol device tersebut.
 
@@ -40,7 +40,7 @@ Berikut adalah langkah-langkah yang harus dilakukan untuk mengaplikasikan sistem
 
 Lakukan sintaks _clone repository_ seperti sintaks dibawah ini.
 
-    git clone https://github.com/dapurkode-com/lmp-stock-watcher.git
+    git clone https://github.com/dapurkode-com/lmp-iot-backend.git
 
 atau dengan mengunduh _repository_ ini kemudian _extract zip file_.
 
@@ -65,12 +65,6 @@ _Generate key encryption_ aplikasi dengan menjalankan sintaks `php artisan key:g
 #### 5. Jalankan migrasi _database_ dan _seeder_
 
 Setelah anda memastikan pengaturan basis data di _file .env_ telah sesuai, jalankan sintaks `php artisan migrate --seed` untuk melakukan migrasi.
-
-## Masuk ke dalam Google Fit
-
-Untuk mensinkronasi aplikasi terhadap Google Fit, Anda perlu masuk kedalam Google Fit melalui aplikasi, dengan cara sebagai berikut.
-
-#### 1. 
 
 ## Dokumentasi
 
