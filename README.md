@@ -66,9 +66,15 @@ _Generate key encryption_ aplikasi dengan menjalankan sintaks `php artisan key:g
 
 Setelah anda memastikan pengaturan basis data di _file .env_ telah sesuai, jalankan sintaks `php artisan migrate --seed` untuk melakukan migrasi.
 
+## Masuk ke dalam Google Fit
+
+Untuk mensinkronasi aplikasi terhadap Google Fit, Anda perlu masuk kedalam Google Fit melalui aplikasi, dengan cara sebagai berikut.
+
+#### 1. 
+
 ## Dokumentasi
 
-Dokumentasi dari REST API aplikasi dapat dilihat pada halaman `/api/docs` setelah menjalankan aplikasi. Anda juga bisa mengunduh dokumentasi seluruh sistem melalui [link ini](documentation/Dokumentasi.pdf).
+Dokumentasi dari REST API aplikasi dapat dilihat pada halaman `/api/docs` setelah menjalankan aplikasi. Anda juga bisa mengunduh dokumentasi seluruh sistem melalui [link ini](docs/files/Dokumentasi.pdf).
 
 ## Catatan
 
