@@ -16,12 +16,16 @@ class GoogleApiTokenController extends Controller
         $this->googleClient = GoogleFitService::getGoogleClient();
     }
 
-    public function index(Request $request){
+    public function index(Request $request): \Illuminate\Http\JsonResponse
+    {
         $this->googleClient->fetchAccessTokenWithAuthCode($request->input('code'));
         Setting::updateOrCreate(
             ['setting_param' => config('app.my_google_fit.setting_token_param')],
             ['setting_value' => json_encode($this->googleClient->getAccessToken())]);
 
-        return response()->json(['status'=>true, 'Google app access token has been updated.']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Google app access token has been updated.'
+        ]);
     }
 }

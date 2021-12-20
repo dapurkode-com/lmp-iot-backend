@@ -70,7 +70,6 @@ class GoogleFitService
             Google_Service_Fitness::FITNESS_BODY_READ
         ]);
         $googleClient->setAuthConfig(self::getAuthConfigPath());
-        $googleClient->setAccessType('offline');
         $googleClient->setRedirectUri(route('google-app.set-access-token'));
 
         return $googleClient;
