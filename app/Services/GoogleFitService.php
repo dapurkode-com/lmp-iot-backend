@@ -39,7 +39,7 @@ class GoogleFitService
             } else {
                 // Request authorization from the user.
                 $authUrl = $googleClient->createAuthUrl();
-                throw new \Exception("Open the following link in your browser:\n$authUrl\n");
+                throw new \Exception("Open the following link in your browser:\n\n$authUrl\n\n");
             }
 
         }
@@ -71,7 +71,6 @@ class GoogleFitService
         ]);
         $googleClient->setAuthConfig(self::getAuthConfigPath());
         $googleClient->setAccessType('offline');
-        $googleClient->setPrompt('select_account consent');
         $googleClient->setRedirectUri(route('google-app.set-access-token'));
 
         return $googleClient;

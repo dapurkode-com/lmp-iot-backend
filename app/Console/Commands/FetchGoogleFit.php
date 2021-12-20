@@ -46,118 +46,122 @@ class FetchGoogleFit extends Command
     {
         $field = $this->argument('field');
 
-        switch ($field) {
-            case 'weight':
-                $this->info('Fetching Weight Data on Google Fit');
-                $weight = GoogleFitService::make()->getWeight();
+        try {
+            switch ($field) {
+                case 'weight':
+                    $this->info('Fetching Weight Data on Google Fit');
+                    $weight = GoogleFitService::make()->getWeight();
 
-                Weight::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'weight'    => $weight
-                ]);
+                    Weight::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'weight'    => $weight
+                    ]);
 
-                $this->info("Weight : $weight kg");
-                break;
+                    $this->info("Weight : $weight kg");
+                    break;
 
-            case 'step':
-                $this->info('Fetching Step Data on Google Fit');
-                $step = GoogleFitService::make()->getStepCount();
+                case 'step':
+                    $this->info('Fetching Step Data on Google Fit');
+                    $step = GoogleFitService::make()->getStepCount();
 
-                Step::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'step'    => $step
-                ]);
-                $this->info("Step Count: $step step(s)");
-                break;
+                    Step::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'step'    => $step
+                    ]);
+                    $this->info("Step Count: $step step(s)");
+                    break;
 
-            case 'calorie':
-                $this->info('Fetching Calorie Expended Data on Google Fit');
-                $calorie = GoogleFitService::make()->getCaloriesExpended();
+                case 'calorie':
+                    $this->info('Fetching Calorie Expended Data on Google Fit');
+                    $calorie = GoogleFitService::make()->getCaloriesExpended();
 
-                CalorieExpended::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'calorie'    => $calorie
-                ]);
-                $this->info("Expended: $calorie cal");
-                break;
+                    CalorieExpended::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'calorie'    => $calorie
+                    ]);
+                    $this->info("Expended: $calorie cal");
+                    break;
 
-            case 'sleep':
-                $this->info('Fetching Sleep Data on Google Fit');
-                $data_json = GoogleFitService::make()->getSleepHoursCount();
-                if ($data_json != null && $data_json != '') {
-                    $data = json_decode($data_json);
+                case 'sleep':
+                    $this->info('Fetching Sleep Data on Google Fit');
+                    $data_json = GoogleFitService::make()->getSleepHoursCount();
+                    if ($data_json != null && $data_json != '') {
+                        $data = json_decode($data_json);
 
-                    Sleep::updateOrCreate(
-                        [
-                            'start_microtime' => $data->start_microtime,
-                            'end_microtime' => $data->end_microtime,
-                        ],
-                        [
-                            'start_microtime' => $data->start_microtime,
-                            'end_microtime' => $data->end_microtime,
-                        ]
-                    );
-                }
+                        Sleep::updateOrCreate(
+                            [
+                                'start_microtime' => $data->start_microtime,
+                                'end_microtime' => $data->end_microtime,
+                            ],
+                            [
+                                'start_microtime' => $data->start_microtime,
+                                'end_microtime' => $data->end_microtime,
+                            ]
+                        );
+                    }
 
-                $this->info("Sleep Data: $data_json cal");
-                break;
+                    $this->info("Sleep Data: $data_json cal");
+                    break;
 
-            case 'heartRate':
-                $this->info('Fetching Heart Rate Data on Google Fit');
-                $heartRate = GoogleFitService::make()->getHeartRate();
+                case 'heartRate':
+                    $this->info('Fetching Heart Rate Data on Google Fit');
+                    $heartRate = GoogleFitService::make()->getHeartRate();
 
-                HeartRate::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'rate'    => $heartRate
-                ]);
-                $this->info("Heart Rate: $heartRate bpm");
-                break;
+                    HeartRate::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'rate'    => $heartRate
+                    ]);
+                    $this->info("Heart Rate: $heartRate bpm");
+                    break;
 
-            default:
-                $this->info('Fetching Google Fit data');
+                default:
+                    $this->info('Fetching Google Fit data');
 
-                $weight = GoogleFitService::make()->getWeight();
-                $step = GoogleFitService::make()->getStepCount();
-                $calories = GoogleFitService::make()->getCaloriesExpended();
-                $sleep = GoogleFitService::make()->getSleepHoursCount();
-                $heartRate = GoogleFitService::make()->getHeartRate();
-                $this->info("Weight : $weight kg.");
-                $this->info("Step Count : $step step(s).");
-                $this->info("Calories Expended : $calories cal.");
-                $this->info("Sleep Time : $sleep");
-                $this->info("Heart Rate : $heartRate bpm.");
+                    $weight = GoogleFitService::make()->getWeight();
+                    $step = GoogleFitService::make()->getStepCount();
+                    $calories = GoogleFitService::make()->getCaloriesExpended();
+                    $sleep = GoogleFitService::make()->getSleepHoursCount();
+                    $heartRate = GoogleFitService::make()->getHeartRate();
+                    $this->info("Weight : $weight kg.");
+                    $this->info("Step Count : $step step(s).");
+                    $this->info("Calories Expended : $calories cal.");
+                    $this->info("Sleep Time : $sleep");
+                    $this->info("Heart Rate : $heartRate bpm.");
 
-                Weight::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'weight'    => $weight
-                ]);
-                Step::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'step'    => $step
-                ]);
-                CalorieExpended::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'calorie'    => $calories
-                ]);
-                if ($sleep != null && $sleep != '') {
-                    $data = json_decode($sleep);
+                    Weight::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'weight'    => $weight
+                    ]);
+                    Step::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'step'    => $step
+                    ]);
+                    CalorieExpended::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'calorie'    => $calories
+                    ]);
+                    if ($sleep != null && $sleep != '') {
+                        $data = json_decode($sleep);
 
-                    Sleep::updateOrCreate(
-                        [
-                            'start_microtime' => $data->start_microtime,
-                            'end_microtime' => $data->end_microtime,
-                        ],
-                        [
-                            'start_microtime' => $data->start_microtime,
-                            'end_microtime' => $data->end_microtime,
-                        ]
-                    );
-                }
-                HeartRate::create([
-                    'microtime' => round(Carbon::now()->timestamp * 1000),
-                    'rate'    => $heartRate
-                ]);
-                break;
+                        Sleep::updateOrCreate(
+                            [
+                                'start_microtime' => $data->start_microtime,
+                                'end_microtime' => $data->end_microtime,
+                            ],
+                            [
+                                'start_microtime' => $data->start_microtime,
+                                'end_microtime' => $data->end_microtime,
+                            ]
+                        );
+                    }
+                    HeartRate::create([
+                        'microtime' => round(Carbon::now()->timestamp * 1000),
+                        'rate'    => $heartRate
+                    ]);
+                    break;
+            }
+        }catch (\Exception $exception){
+            $this->error($exception->getMessage());
         }
     }
 }
