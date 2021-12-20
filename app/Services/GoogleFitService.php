@@ -13,22 +13,55 @@ use Google_Service_Fitness_Session as Session;
 
 class GoogleFitService
 {
-    public const AUTH_PATH = 'client_id.json';
-    public const AUTH_PARAM = 'GOOGLE_FIT_TOKEN';
+    public const AUTH_PATH = '';
     public const ACTIVITY_TYPE_SLEEP = 72;
-
-    private Google_Client $googleClient;
 
     private Google_Service_Fitness $client;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
-        $tokenData = Setting::find(self::AUTH_PARAM);
-        $authConfig = base_path(self::AUTH_PATH);
+        $tokenData = Setting::find(config('app.my_google_fit.setting_token_param'));
 
-        $this->googleClient = app(Google_Client::class);
-        $this->googleClient->setApplicationName('LMP IoT Dashboard');
-        $this->googleClient->setScopes([
+        $googleClient = self::getGoogleClient();
+
+        if ($tokenData != null && $tokenData->setting_value != null) {
+            $accessToken = json_decode($tokenData->setting_value, true);
+            $googleClient->setAccessToken($accessToken);
+        }
+
+        if ($googleClient->isAccessTokenExpired()) {
+            // Refresh the token if possible, else fetch a new one.
+            if ($googleClient->getRefreshToken()) {
+                $googleClient->fetchAccessTokenWithRefreshToken($googleClient->getRefreshToken());
+            } else {
+                // Request authorization from the user.
+                $authUrl = $googleClient->createAuthUrl();
+                throw new \Exception("Open the following link in your browser:\n$authUrl\n");
+            }
+
+        }
+        $this->client = new Google_Service_Fitness($googleClient);
+    }
+
+    public static function make(): self
+    {
+        return new static();
+    }
+
+    public static function getAuthConfigPath(): string {
+        $file_setting_path = config('app.my_google_fit.auth_config.path');
+        $file_setting_name = config('app.my_google_fit.auth_config.file_name');
+
+        return base_path("$file_setting_path/$file_setting_name");
+    }
+
+    public static function getGoogleClient(): Google_Client{
+        $googleClient = app(Google_Client::class);
+        $googleClient->setApplicationName('LMP IoT Dashboard');
+        $googleClient->setScopes([
             Google_Service_Fitness::FITNESS_ACTIVITY_READ,
             Google_Service_Fitness::FITNESS_SLEEP_READ,
             Google_Service_Fitness::FITNESS_HEART_RATE_READ,
@@ -36,45 +69,12 @@ class GoogleFitService
             Google_Service_Fitness::FITNESS_NUTRITION_READ,
             Google_Service_Fitness::FITNESS_BODY_READ
         ]);
-        $this->googleClient->setAuthConfig($authConfig);
-        $this->googleClient->setAccessType('offline');
-        $this->googleClient->setPrompt('select_account consent');
+        $googleClient->setAuthConfig(self::getAuthConfigPath());
+        $googleClient->setAccessType('offline');
+        $googleClient->setPrompt('select_account consent');
+        $googleClient->setRedirectUri(route('google-app.set-access-token'));
 
-        if ($tokenData != null && $tokenData->setting_value != null) {
-            $accessToken = json_decode($tokenData->setting_value, true);
-            $this->googleClient->setAccessToken($accessToken);
-        }
-
-        if ($this->googleClient->isAccessTokenExpired()) {
-            // Refresh the token if possible, else fetch a new one.
-            if ($this->googleClient->getRefreshToken()) {
-                $this->googleClient->fetchAccessTokenWithRefreshToken($this->googleClient->getRefreshToken());
-            } else {
-                // Request authorization from the user.
-                $authUrl = $this->googleClient->createAuthUrl();
-                printf("Open the following link in your browser:\n%s\n", $authUrl);
-                print 'Enter verification code: ';
-                $authCode = trim(fgets(STDIN));
-
-                // Exchange authorization code for an access token.
-                $accessToken = $this->googleClient->fetchAccessTokenWithAuthCode($authCode);
-                $this->googleClient->setAccessToken($accessToken);
-
-                // Check to see if there was an error.
-                if (array_key_exists('error', $accessToken)) {
-                    throw new Exception(join(', ', $accessToken));
-                }
-            }
-
-            Setting::updateOrCreate(['setting_param' => self::AUTH_PARAM], ['setting_value' => json_encode($this->googleClient->getAccessToken())]);
-        }
-
-        $this->client = new Google_Service_Fitness($this->googleClient);
-    }
-
-    public static function make(): self
-    {
-        return new static();
+        return $googleClient;
     }
 
     public function getSleepHoursCount(): string

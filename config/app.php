@@ -230,8 +230,29 @@ return [
 
     ],
 
-    // LMP Custome Config
+    /*
+     * ---------------------------------------------------------------
+     * LMP CUSTOM CONFIGURATION
+     * ---------------------------------------------------------------
+     */
+    'stock_image_path' => 'stock_image',
+    /*
+     * Google Fit Client
+     */
+    'my_google_fit' => [
+        /*
+         * Google Access Token
+         */
+        'setting_token_param' => env('GOOGLE_FIT_SETTING_TOKEN_PARAM', 'GOOGLE_FIT_TOKEN'),
+        /*
+         * Client Auth Config
+         */
+        'auth_config' => [
+            'path'          => env('GOOGLE_FIT_AUTH_CONFIG_PATH', 'gclient'),
+            'file_name'     => env('GOOGLE_FIT_AUTH_CONFIG_FILE_NAME', 'client_id.json'),
+        ]
+    ],
 
-    'stock_image_path' => 'stock_image'
+
 
 ];
